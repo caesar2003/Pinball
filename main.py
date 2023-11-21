@@ -34,7 +34,10 @@ while running:
     # Adjust screen
     s_width, s_height = screen.get_width(), screen.get_height()
     bg = pygame.transform.scale(bg_orig, (s_width, s_height))
-    screen.blit(bg, (0, 0))
+    screen.blit(bg, (0, 0)) # redraws background image
+
+
+    # Here the action could take place
 
 
     pygame.display.flip() # Update the display of the full screen
