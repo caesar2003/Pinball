@@ -28,6 +28,7 @@ running = True
 # Main event loop
 while running:
     for event in pygame.event.get():
+        # Get's all the user action (keyboard, mouse, joysticks, ...)
         continue
 
     # Adjust screen
