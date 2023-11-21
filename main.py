@@ -9,7 +9,8 @@ s_width = 600
 s_height = 800
 
 # Define spacetime 
-GRAVITY = [0.,0.3] # x-y direction
+GRAVITY_X = 0.0
+GRAVITY_Y = 0.3
 DT = 1 # ms (discretization of time) 
 
 # Making display screen
@@ -22,7 +23,19 @@ running = True
 
 # You could declare components (the initial ball, the other items, ...) here
 
+ball_x = 100
+ball_y = 150
+ball_vx = 0
+ball_vy = 0
 
+ball_radius = 30
+
+ball2_x = 200
+ball2_y = 150
+ball2_vx = 0
+ball2_vy = 0
+
+ball2_radius = 40
 
 
 # Main event loop
@@ -38,6 +51,22 @@ while running:
 
 
     # Here the action could take place
+
+    # s = s0 + v0*t + 1/2a*t**2
+
+    ball_vy = ball_vy + GRAVITY_Y*DT
+    ball2_vy = ball2_vy + GRAVITY_Y*DT
+
+    if ball_y >= screen.get_height():
+        ball_vy = ball_vy * (-1)
+    if ball2_y >= screen.get_height():
+        ball2_vy = ball2_vy * (-1)
+
+    ball_y = ball_y + ball_vy*DT + 0.5 * GRAVITY_Y*DT**2
+    ball2_y = ball2_y + ball2_vy*DT + 0.5 * GRAVITY_Y*DT**2
+
+    pygame.draw.circle(screen, (35, 161, 224), [ball_x,ball_y] , ball_radius)
+    pygame.draw.circle(screen, (35, 161, 224), [ball2_x,ball2_y] , ball2_radius)
 
 
     pygame.display.flip() # Update the display of the full screen
