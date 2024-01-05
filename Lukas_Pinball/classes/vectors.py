@@ -14,7 +14,7 @@ class Vector:
     dunder methods:
     __init__: self explainatory
     __str__: returns attributes of the vector
-    (__len__: self explainatory)(currently not included)
+    __abs__: returns the length of the vector
     __add__: addition of either two vectors or the length of the vector and a number
     __sub__: equivalent to __add__
 
@@ -72,7 +72,7 @@ class Vector:
             Vector with following values:\n\
             x = {self.x}\n\
             y = {self.y}\n\
-            length = {self.len}\n\
+            length = {abs(self)}\n\
             angle = {self.angle} (rad), {np.degrees(self.angle)} (degree), {np.degrees(self.angle) / 3.6} (% of a whole circle)'
 
 

@@ -35,7 +35,7 @@ class Ball(pygame.sprite.Sprite):
     '''
 
     # global gravity to all balls (maybe this will become a object specific attribute later)
-    gravity = Vector(0, const.gravity)
+    gravity = const.gravity
 
     def __init__(self, x, y, radius = setup.ball_rad):
         '''
