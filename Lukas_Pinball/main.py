@@ -24,6 +24,7 @@ Ball(width / 2, height / 2)
 a = Wall([200, 500], [500, 300], [70, 200])
 
 
+
 ### GAME
 while True:
 

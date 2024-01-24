@@ -26,6 +26,12 @@ class Wall(pygame.sprite.Sprite):
     self.rotations (list containing Wall objects): contains all needed rotations for collisions function
                                                 this will only exist if arg group == True
 
+    dunder methods:
+    __init__: initiation method of the class
+    __str__: properties of the wall
+
+    other methods:
+    update: does all the updates of the wall
     '''
 
     def __init__(self, *args, group = True):
@@ -79,6 +85,15 @@ class Wall(pygame.sprite.Sprite):
                     new_coords += [np.dot(old_coords, rotation).tolist()]
             
                 self.rotations += [Wall(*new_coords, group = False)]
+
+    
+    def __str__(self):
+        '''
+        returns properties of the wall
+        '''
+        return f'\
+            coordinates:\n {self.coords}\n\n\
+            angles:\n {self.angles}\n'
 
 
     def update(self):

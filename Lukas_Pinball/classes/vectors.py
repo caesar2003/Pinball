@@ -73,7 +73,7 @@ class Vector:
             x = {self.x}\n\
             y = {self.y}\n\
             length = {abs(self)}\n\
-            angle = {self.angle} (rad), {np.degrees(self.angle)} (degree), {np.degrees(self.angle) / 3.6} (% of a whole circle)'
+            angle = {self.angle} (rad), {np.degrees(self.angle)} (degree), {np.degrees(self.angle) / 3.6} (% of a whole circle)\n'
 
 
 
