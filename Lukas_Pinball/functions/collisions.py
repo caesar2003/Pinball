@@ -22,6 +22,9 @@ def rotate_wall(wall):
     yields:
     a new instance of class Wall for each angle
     
+    TODO:
+    move this to Wall.__init__()
+
     optional TODO to speed up the code:
     dont rotate the whole wall but instead just the side to be turned to zero
     '''
@@ -85,7 +88,7 @@ def col_ball_wall(ball, wall):
     for i in range(len(wall.angles)):
         angle = wall.angle[i]
 
-        rot_ball = rotate_ball(ball, angle)
+        rot_ball = rotate_ball(ball, angle) # TODO: initiate all rotations when initiating the walls
         rot_wall = next(rot_wall_gen)
 
         # TODO:

@@ -23,8 +23,11 @@ class Ball(pygame.sprite.Sprite):
     gravity: acceleration of the ball in y+ direction (downwards)
 
     object attributes:
-    coordinates (Vector)(2-dimensional)
+    coords (Vector)(2-dimensional): coordinates of the Ball center
     radius (int or float): size of the ball
+    speed (Vector)(2-dimensional): speed of the Ball
+    index (int): some index number to log the order of the walls (idk if this will be usefull sometime)
+                                                this will only exist if arg group == True
 
     dunder methods:
     __init__: initiation method of the class
@@ -37,7 +40,7 @@ class Ball(pygame.sprite.Sprite):
     # global gravity to all balls (maybe this will become a object specific attribute later)
     gravity = const.gravity
 
-    def __init__(self, x, y, radius = setup.ball_rad):
+    def __init__(self, x, y, radius = setup.ball_rad, group = True):
         '''
         initiation of a ball object
 
@@ -53,9 +56,9 @@ class Ball(pygame.sprite.Sprite):
 
         self.speed = Vector(0, 0)
 
-        ball_group.add(self)
-
-        self.index = len(ball_group) - 1
+        if group:
+            ball_group.add(self)
+            self.index = len(ball_group) - 1
 
 
     def __str__(self):
