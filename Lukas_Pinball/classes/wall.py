@@ -83,13 +83,8 @@ class Wall(pygame.sprite.Sprite):
                     old_coords = np.array([self.coords[i][0], self.coords[i][1]])
                     rotation = np.array([[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]]) # rotation matrix (clockwise due to the positive y direction being downwards)
                     new_coords += [np.dot(old_coords, rotation).tolist()]
-
-                newer_coords = []
-                for i in range(len(new_coords)):
-                    if new_coords[i][0] < min(new_coords[i]) + 0.1:
-                        newer_coords += [new_coords[i]]
                         
-                self.rotations += [Wall(*newer_coords, group = False)]
+                self.rotations += [Wall(*new_coords, group = False)]
 
     
     def __str__(self):

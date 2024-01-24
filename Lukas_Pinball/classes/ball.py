@@ -6,9 +6,10 @@ sys.path.append(str(Path(__file__).parents[1]))
 import numpy as np
 import pygame
 
+import functions.collisions as coll
 import vars.const as const
 import vars.setup as setup
-from vars.setup import ball_group
+from vars.setup import ball_group, wall_group
 from classes.vectors import Vector
 
 
@@ -35,6 +36,7 @@ class Ball(pygame.sprite.Sprite):
 
     other methods:
     update: does all the logical and graphical updates of the ball
+    rotate: returns a copy of the ball with rotated coordinates by a given angle
     '''
 
     # global gravity to all balls (maybe this will become a object specific attribute later)
@@ -103,7 +105,29 @@ class Ball(pygame.sprite.Sprite):
         '''
         
         self.move()
+        # for wall in wall_group:
+        #     if coll.col_ball_wall(self, wall):
+        #         print("coll")
         self.draw()
+
+
+    def rotate(self, angle):
+        '''
+        rotate the coordinates of a ball by a given angle
+
+        args:
+        ball (class: Ball): The ball of which the coordinates will be rotated
+        angle (in rad): The angle to rotate the coordinates
+
+        returns:
+        a new instance of class Ball
+        '''
+
+        old_coords = self.coords.values # coordinates as numpy array (see: classes.vectors)
+        rotation = np.array([[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]]) # rotation matrix (clockwise due to the positive y direction being downwards)
+        new_coords = np.dot(old_coords, rotation).tolist()
+
+        return Ball(*new_coords, self.radius, group = False)
 
         # TODO:
         # movement updates (to be updated (no thats not intended))
