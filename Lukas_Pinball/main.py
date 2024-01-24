@@ -22,6 +22,9 @@ pygame.init()
 # preparation
 Ball(width / 2, height / 2)
 a = Wall([200, 500], [500, 300], [70, 200])
+print(str(a.rotations[0]))
+print(str(a.rotations[1]))
+print(str(a.rotations[2]))
 
 
 

@@ -12,32 +12,30 @@ import vars.setup as setup
 
 # functions
 
-def rotate_wall(wall):
-    '''
-    rotates a wall to make one angle 0 at a time
+# def rotate_wall(wall):
+#     '''
+#     rotates a wall to make one angle 0 at a time
 
-    args:
-    wall (class: Wall): The wall to be rotated
+#     args:
+#     wall (class: Wall): The wall to be rotated
 
-    yields:
-    a new instance of class Wall for each angle
-    
-    TODO:
-    move this to Wall.__init__()
+#     yields:
+#     a new instance of class Wall for each angle
 
-    optional TODO to speed up the code:
-    dont rotate the whole wall but instead just the side to be turned to zero
-    '''
 
-    for angle in wall.angles:
-        new_coords = []
+#     optional TODO to speed up the code:
+#     dont rotate the whole wall but instead just the side to be turned to zero
+#     '''
+
+#     for angle in wall.angles:
+#         new_coords = []
         
-        for i in range(len(wall.coords)):
-            old_coords = np.array([wall.coords[i][0], wall.coords[i][1]])
-            rotation = np.array([[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]]) # rotation matrix (clockwise due to the positive y direction being downwards)
-            new_coords += [np.dot(old_coords, rotation).tolist()]
+#         for i in range(len(wall.coords)):
+#             old_coords = np.array([wall.coords[i][0], wall.coords[i][1]])
+#             rotation = np.array([[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]]) # rotation matrix (clockwise due to the positive y direction being downwards)
+#             new_coords += [np.dot(old_coords, rotation).tolist()]
             
-        yield Wall(*new_coords, group = False)
+#         yield Wall(*new_coords, group = False)
 
 # testing of rotate_wall
 # a = Wall([10, 0], [0, 0], [5, 5], group = False)
@@ -83,13 +81,15 @@ def col_ball_wall(ball, wall):
     '''
 
     collision = False
-    rot_wall_gen = rotate_wall(wall)
 
     for i in range(len(wall.angles)):
         angle = wall.angle[i]
 
-        rot_ball = rotate_ball(ball, angle) # TODO: initiate all rotations when initiating the walls
-        rot_wall = next(rot_wall_gen)
+        rot_ball = rotate_ball(ball, angle)
+        rot_wall = wall.rotations[i]
+
+
+        
 
         # TODO:
         # check for lines between edges
