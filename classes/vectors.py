@@ -143,7 +143,7 @@ class Vector:
         rotates the vector without changing its length
 
         args:
-        angle: the angle to rotate the vector (in positive mathematical direction)
+        angle: the angle to rotate the vector (counter clockwise)
 
         returns: None
 
@@ -155,5 +155,5 @@ class Vector:
             raise TypeError(f'angle has to be from type int or float but is {type(angle)}')
 
         self.angle = (self.angle + angle) % (2 * np.pi)
-        self.x = np.cos(self.angle)
-        self.y = -np.sin(self.angle)
+        self.x = abs(self) * np.cos(self.angle)
+        self.y = abs(self) * -np.sin(self.angle)

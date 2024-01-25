@@ -56,3 +56,19 @@ def get_angle(*args):
         angle += np.pi
 
     return angle
+
+
+def distance(p1, p2):
+    '''
+    returns the distance between two points
+
+    args:
+    p1 (tuple, list or numpy.ndarray): first point
+    p2 (tuple, list or numpy.ndarray): second point
+    arguments must contain 2 elements each: x coordinate first, then y coordinate
+
+    returns:
+    float: distance between the two points
+    '''
+
+    return np.sqrt((p2[0] - p1[0])**2 + (p2[1] - p1[1])**2)
