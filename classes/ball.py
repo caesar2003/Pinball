@@ -43,13 +43,18 @@ class Ball(pygame.sprite.Sprite):
     gravity = const.gravity
     # gravity = Vector(0, 0)
 
-    def __init__(self, x, y, radius = setup.ball_rad, group = True):
+    def __init__(self, x, y, radius = setup.ball_rad, speed = None, group = True):
         '''
         initiation of a ball object
 
         args:
         x, y: initial coordinates of the ball
         radius: (initial) radius of the ball
+        speed: initial speed of the ball
+        group: determines if the ball is added to ball_group and gets an index
+
+        raises:
+        Type Error if argument speed is a not supported type
         '''
 
         super().__init__()
@@ -57,12 +62,20 @@ class Ball(pygame.sprite.Sprite):
         self.coords = Vector(x, y)
         self.radius = radius
 
-        self.speed = Vector(0, 0)
+        if speed is None:
+            self.speed = Vector(0, 0)
+        elif isinstance(speed, tuple) or isinstance(speed, list) or isinstance(speed, np.ndarray):
+            self.speed = Vector(speed[0], speed[1])
+        elif isinstance(speed, Vector):
+            self.speed = speed
+        else:
+            raise TypeError(f'type not supported (yet). Already supported types for argument "speed" are NoneType, tuple, list, numpy.ndarray and Vector. Given argument is from type {type(speed)}')
 
         if group:
             ball_group.add(self)
             self.index = len(ball_group) - 1
 
+        self.test = True
 
     def __str__(self):
         '''
@@ -105,10 +118,16 @@ class Ball(pygame.sprite.Sprite):
         '''
         
         self.move()
-        # for wall in wall_group:
-        #     if coll.col_ball_wall(self, wall):
-        #         print("coll")
+        for wall in wall_group:
+            is_colliding, coll_angle = coll.col_ball_wall(self, wall)
+            if is_colliding and self.test:
+                self.speed.rotate(2 * -(coll_angle - self.speed.angle))
+                
         self.draw()
+
+        # TODO:
+        # movement updates (to be updated (no thats not intended))
+        # collision checks
 
 
     def rotate(self, angle):
@@ -124,12 +143,12 @@ class Ball(pygame.sprite.Sprite):
         '''
 
         old_coords = self.coords.values # coordinates as numpy array (see: classes.vectors)
+        old_speed = self.speed.values
         rotation = np.array([[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]]) # rotation matrix (clockwise due to the positive y direction being downwards)
         new_coords = np.dot(old_coords, rotation).tolist()
+        new_speed = np.dot(old_speed, rotation).tolist()
 
-        return Ball(*new_coords, self.radius, group = False)
+        return Ball(*new_coords, self.radius, speed = new_speed, group = False)
 
-        # TODO:
-        # movement updates (to be updated (no thats not intended))
-        # collision checks
+
 

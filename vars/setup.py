@@ -16,7 +16,7 @@ fps = 60
 width = 800
 height = 600
 screen = pygame.display.set_mode((width, height))#, pygame.RESIZABLE
-bg = pygame.image.load('Lukas_pinball/graphics/bkg.jpg')
+bg = pygame.image.load('graphics/bkg.jpg')
 bg_rect = bg.get_rect(topleft = (0, 0))
 
 # groups
