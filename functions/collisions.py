@@ -8,6 +8,7 @@ import numpy as np
 # from classes.ball import Ball
 # from classes.wall import Wall
 import vars.setup as setup
+from functions.general import distance, get_angle
 
 
 # functions
@@ -97,17 +98,19 @@ def col_ball_wall(ball, wall):
             or rot_wall.coords[j][0] <= rot_ball.coords.x <= rot_wall.coords[i][0]:
 
             if abs(rot_ball.coords.y - rot_wall.coords[i][1]) <= ball.radius:
-                angle = rot_ball.speed.angle - np.pi / 2
+                angle = wall.angles[i]
                 return True, angle # TODO: check for remaining distance
+            
+    for i in range(len(wall.coords)):
+        if distance(ball.coords.values, wall.coords[i]) <= ball.radius:
+            angle = get_angle(ball.coords.values, wall.coords[i])
+            return True, angle # TODO: check for remaining distance
+    
+    return False, 0
 
 
         # TODO:
-        # check for lines between edges (WIP)
-        # check for edges
-        # change variable 'collision' to 'True' if a collision is happening
-        # calculate the angle if a collision is happening
-        # break the loop if a collision is happening
-
+        # check for remaining distance and add it to the coordinates of the ball
 
 
 

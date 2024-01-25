@@ -20,8 +20,9 @@ from vars.setup import wall_group, ball_group
 pygame.init()
 
 # preparation
-Ball(width / 2, height / 2)
-a = Wall([200, 500], [500, 300], [70, 200])
+Ball(width / 2, height / 4)
+Wall([160, height - 300], [width - 100, height - 200], [width / 2, height - 50])
+Wall([500, 0], [700, 0], [650, 700])
 # print(str(a.rotations[0]))
 # print(str(a.rotations[1]))
 # print(str(a.rotations[2]))
@@ -44,6 +45,7 @@ while True:
     general.screen_bg(screen, bg)
     ball_group.update()
     wall_group.update()
+
 
     # update screen
     pygame.display.flip()
