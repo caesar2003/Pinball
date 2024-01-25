@@ -93,9 +93,13 @@ def col_ball_wall(ball, wall):
             j = 0
         
         
-        if rot_wall.coords[i][0] <= rot_ball.coords.x <= rot_wall.coords[j][0] or rot_wall.coords[j][0] <= rot_ball.coords.x <= rot_wall.coords[i][0]:
+        if rot_wall.coords[i][0] <= rot_ball.coords.x <= rot_wall.coords[j][0]\
+            or rot_wall.coords[j][0] <= rot_ball.coords.x <= rot_wall.coords[i][0]:
+
             if abs(rot_ball.coords.y - rot_wall.coords[i][1]) <= ball.radius:
-                return True # TODO: return angle, check for remaining distance
+                angle = rot_ball.speed.angle - np.pi / 2
+                return True, angle # TODO: check for remaining distance
+
 
         # TODO:
         # check for lines between edges (WIP)
