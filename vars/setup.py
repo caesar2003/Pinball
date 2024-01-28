@@ -22,6 +22,8 @@ bg_rect = bg.get_rect(topleft = (0, 0))
 # groups
 wall_group = pygame.sprite.Group()
 ball_group = pygame.sprite.Group()
+circle_group = pygame.sprite.Group()
+flipper_group = pygame.sprite.Group()
 
 #ball
 ball_rad = 30

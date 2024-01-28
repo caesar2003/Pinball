@@ -1,4 +1,3 @@
-# imports
 from pathlib import Path
 import sys
 sys.path.append(str(Path(__file__).parents[1]))
@@ -15,7 +14,7 @@ from classes.vectors import Vector
 
 # definition of the
 #  class
-class Ball(pygame.sprite.Sprite):
+class Circle(pygame.sprite.Sprite):
     '''
     Balls, theres nothing more to say, its just the class for the Balls in the game
     subclass of pygame.sprite.Sprite to make it compatible with pygame groups
@@ -40,7 +39,7 @@ class Ball(pygame.sprite.Sprite):
     '''
 
     # global gravity to all balls (maybe this will become a object specific attribute later)
-    gravity = const.gravity
+    #gravity = const.gravity
     # gravity = Vector(0, 0)
 
     def __init__(self, x, y, radius = setup.ball_rad, speed = None, group = True):
@@ -72,8 +71,8 @@ class Ball(pygame.sprite.Sprite):
             raise TypeError(f'type not supported (yet). Already supported types for argument "speed" are NoneType, tuple, list, numpy.ndarray and Vector. Given argument is from type {type(speed)}')
 
         if group:
-            ball_group.add(self)
-            self.index = len(ball_group) - 1
+            circle_group.add(self)
+            self.index = len(circle_group) - 1
 
         self.test = True
 
@@ -89,10 +88,7 @@ class Ball(pygame.sprite.Sprite):
 
 
     def draw(self):
-        pygame.draw.circle(setup.screen, 'black', self.coords.values, self.radius, width = 2)
-        pygame.draw.circle(setup.screen, 'white', self.coords.values, self.radius - 2)
-        pygame.draw.circle(setup.screen, 'blue', self.coords.values, self.radius - 18)
-        pygame.draw.circle(setup.screen, 'black', self.coords.values, 4)
+        pygame.draw.circle(setup.screen, 'black', self.coords.values, self.radius)
 
 
     def move(self):
@@ -102,10 +98,11 @@ class Ball(pygame.sprite.Sprite):
 
         returns: None
         '''
-        self.speed += self.gravity
-        self.coords += self.speed
+        if self.coords.x >700 or self.coords.x < 100:
+            self.speed = Vector(-self.speed.x, self.speed.y)
+        self.coords+= self.speed
 
-
+    
     def update(self):
         '''
         does all the logical and graphical updates for the ball:
@@ -118,24 +115,19 @@ class Ball(pygame.sprite.Sprite):
         '''
         
         self.move()
+        """
         for wall in wall_group:
             is_colliding, coll_angle = coll.col_ball_wall(self, wall)
             if is_colliding and self.test:
-                self.speed.rotate(2*-(coll_angle - self.speed.angle))
-                
-        for circle in circle_group:
-            is_colliding, coll_angle, col_deep = coll.col_ball_circle(self, circle)
-            if is_colliding and self.test:
-                    #self.coords = Vector(self.coords.x + col_deep*np.cos(coll_angle), self.coords.y + col_deep*np.sin(coll_angle))
-                    self.speed.rotate(2*-(coll_angle - self.speed.angle))
-
+                self.speed.rotate(2 * -(coll_angle - self.speed.angle))
+        """
         self.draw()
 
         # TODO:
         # movement updates (to be updated (no thats not intended))
         # collision checks
 
-
+    
     def rotate(self, angle):
         '''
         rotate the coordinates of a ball by a given angle
@@ -154,7 +146,7 @@ class Ball(pygame.sprite.Sprite):
         new_coords = np.dot(old_coords, rotation).tolist()
         new_speed = np.dot(old_speed, rotation).tolist()
 
-        return Ball(*new_coords, self.radius, speed = new_speed, group = False)
+        return Circle(*new_coords, self.radius, speed = new_speed, group = False)
 
 
 
