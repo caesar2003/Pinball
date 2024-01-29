@@ -9,7 +9,7 @@ import pygame
 import functions.collisions as coll
 import vars.const as const
 import vars.setup as setup
-from vars.setup import ball_group, wall_group, circle_group
+from vars.setup import ball_group, wall_group, circle_group, flipper_group
 from classes.vectors import Vector
 
 
@@ -128,6 +128,14 @@ class Ball(pygame.sprite.Sprite):
             if is_colliding and self.test:
                     #self.coords = Vector(self.coords.x + col_deep*np.cos(coll_angle), self.coords.y + col_deep*np.sin(coll_angle))
                     self.speed.rotate(2*-(coll_angle - self.speed.angle))
+
+        for flipper in flipper_group:
+            is_colliding, coll_angle = coll.col_ball_flipper(self, flipper)
+            if is_colliding and self.test:
+                    #self.coords = Vector(self.coords.x + col_deep*np.cos(coll_angle), self.coords.y + col_deep*np.sin(coll_angle))
+                    #self.speed.rotate(2*-(coll_angle - self.speed.angle))
+                    print(True)
+
 
         self.draw()
 

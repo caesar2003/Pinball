@@ -131,6 +131,22 @@ def col_ball_circle(ball, circle):
         return True, angle, abs(distance(ball.coords.values, circle.coords.values) - (ball.radius + circle.radius))
     else:
         return False, 0, 0
+    
+def col_ball_flipper(ball, flipper):
+    '''
+    checks for collision of ball and circle
+    
+    args:
+    ball (class: Ball): the ball to check
+    circle (class: Circle): the circle to check
+    
+    returns:
+    bool: true if collision is happening, else false
+    angle: the angle of the collision (vom Lot aus (TODO: Übersetzen))
+    '''
+
+    collision = False
+    return False, 0
 
 
     

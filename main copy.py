@@ -23,8 +23,10 @@ from vars.setup import wall_group, ball_group, circle_group, flipper_group
 pygame.init()
 
 # preparation
-Ball(650, 100 , speed= [0,-5])
-Flipper([400,500], 50)
+Ball(310, 100 , speed= [0,0])
+flipper_right = Flipper([400,500], 50,True, np.pi, 3*np.pi/2)
+flipper_left = Flipper([300,500], 50,False,0, -np.pi/2)
+#Flipper([300,500], 50, 0, np.pi/2)
 
 
 a = Wall([10, 10], [700, 10])
@@ -50,6 +52,20 @@ while True:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_x:
                 system.close()
+            if event.key == pygame.K_d:
+                flipper_right.rotating = True
+                flipper_right.direction = True
+            if event.key == pygame.K_a:
+                flipper_left.rotating = True
+                flipper_left.direction = False
+        elif event.type == pygame.KEYUP:
+            if event.key == pygame.K_d:
+                flipper_right.rotating = False
+                flipper_right.direction = True
+            if event.key == pygame.K_a:
+                flipper_left.rotating = False
+                flipper_left.direction = False
+
     
     ## Logic
     general.screen_bg(screen, bg)

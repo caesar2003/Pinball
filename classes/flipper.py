@@ -34,7 +34,7 @@ class Flipper(pygame.sprite.Sprite):
     update: does all the updates of the wall
     '''
 
-    def __init__(self, rot_point, radius, start_angle= np.pi, stop_angle =np.pi/2, group = True):
+    def __init__(self, rot_point, radius,direction, start_angle= np.pi, stop_angle =3*np.pi/2, group = True):
         '''
         initiation of a flipper object
         
@@ -62,7 +62,11 @@ class Flipper(pygame.sprite.Sprite):
         self.radius = radius
         self.start_angle = start_angle
         self.stop_angle = stop_angle
+        self.current_angle = start_angle
         self.coords_end = Vector(self.coords.x +self.radius * np.cos(self.start_angle),self.coords.y+ self.radius * np.sin(self.start_angle))
+        self.rotating = False
+        self.speed = np.pi/50
+        self.direction = direction
 
         if group:
             flipper_group.add(self)
@@ -84,7 +88,25 @@ class Flipper(pygame.sprite.Sprite):
 
         returns: None
         '''
-        self.coords_end = Vector(self.coords.x +self.radius * np.cos(self.start_angle),self.coords.y+ self.radius * np.sin(self.start_angle))
+        if self.rotating==True and self.direction==True:
+            self.current_angle += self.speed
+            if self.current_angle > self.stop_angle:
+                self.current_angle = self.stop_angle
+        elif  self.rotating == False and self.direction == True:
+            self.current_angle -= self.speed
+            if self.current_angle < self.start_angle:
+                self.current_angle = self.start_angle
+        elif self.rotating == True and self.direction == False:
+            self.current_angle -= self.speed
+            if self.current_angle < self.stop_angle:
+                self.current_angle = self.stop_angle
+        elif self.rotating == False and self.direction == False:
+            self.current_angle += self.speed
+            if self.current_angle > self.start_angle:
+                self.current_angle = self.start_angle
+        
+        self.coords_end = Vector(self.coords.x +self.radius * np.cos(self.current_angle),self.coords.y+ self.radius * np.sin(self.current_angle))
+ 
     def update(self):
         '''
         does all the logic for the walls:
