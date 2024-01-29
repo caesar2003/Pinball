@@ -66,7 +66,7 @@ class Flipper(pygame.sprite.Sprite):
         self.coords_end = Vector(self.coords.x +self.radius * np.cos(self.start_angle),self.coords.y+ self.radius * np.sin(self.start_angle))
         self.rotating = False
         self.speed = np.pi/50
-        self.direction = direction
+        self.direction = direction# True right (clockwise), False left ( counterclockwise)
 
         if group:
             flipper_group.add(self)
