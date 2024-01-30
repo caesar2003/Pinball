@@ -75,8 +75,6 @@ class Ball(pygame.sprite.Sprite):
             ball_group.add(self)
             self.index = len(ball_group) - 1
 
-        self.test = True
-
     def __str__(self):
         '''
         returns attributes of the ball
@@ -105,6 +103,11 @@ class Ball(pygame.sprite.Sprite):
         self.speed += self.gravity
         self.coords += self.speed
 
+        for wall in wall_group:
+            is_colliding, coll_angle = coll.col_ball_wall(self, wall)
+            if is_colliding:
+                self.speed.rotate(2 * -(coll_angle - self.speed.angle))
+
 
     def update(self):
         '''
@@ -118,10 +121,7 @@ class Ball(pygame.sprite.Sprite):
         '''
         
         self.move()
-        for wall in wall_group:
-            is_colliding, coll_angle = coll.col_ball_wall(self, wall)
-            if is_colliding and self.test:
-                self.speed.rotate(2 * -(coll_angle - self.speed.angle))
+
                 
         self.draw()
 

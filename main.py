@@ -20,11 +20,9 @@ from vars.setup import wall_group, ball_group
 pygame.init()
 
 # preparation
-Ball(width / 2, height / 2)
-a = Wall([10, 10], [500, 300], [70, 200])
-# print(str(a.rotations[0]))
-# print(str(a.rotations[1]))
-# print(str(a.rotations[2]))
+Ball(width / 2, height / 2 - 100)
+Wall([160, height / 2], [width - 100, height - 200], [width / 2, height - 50])
+Wall([500, 0], [700, 0], [650, 700])
 
 
 
