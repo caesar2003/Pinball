@@ -106,6 +106,7 @@ class Ball(pygame.sprite.Sprite):
         for wall in wall_group:
             is_colliding, coll_angle = coll.col_ball_wall(self, wall)
             if is_colliding:
+                self.coords -= self.speed
                 self.speed.rotate(2 * -(coll_angle - self.speed.angle))
 
 
