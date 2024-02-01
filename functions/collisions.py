@@ -4,6 +4,7 @@ import sys
 sys.path.append(str(Path(__file__).parents[1]))
 
 import numpy as np
+import math 
 
 # from classes.ball import Ball
 # from classes.wall import Wall
@@ -148,6 +149,25 @@ def col_ball_flipper(ball, flipper):
     collision = False
     return False, 0
 
+def col_ball_ball(ball, ball2):
+    '''
+    checks for collision of ball and ball
+    
+    args:
+    ball (class: Ball): the ball to check
+    circle (class: Circle): the circle to check
+    
+    returns:
+    bool: true if collision is happening, else false
+    angle: the angle of the collision (vom Lot aus (TODO: Übersetzen))
+    '''
+
+    collision = False
+    if distance(ball.coords.values, ball2.coords.values) <= ball.radius + ball2.radius:
+        angle= get_angle(ball.coords.values, ball2.coords.values)
+        return True, angle
+    else:
+        return False, 0
 
     
 

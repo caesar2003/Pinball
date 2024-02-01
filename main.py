@@ -23,22 +23,22 @@ from vars.setup import wall_group, ball_group, circle_group, flipper_group
 pygame.init()
 
 # preparation
-Ball(310, 100 , speed= [0,0])
-flipper_right = Flipper([400,500], 50,True, np.pi, 3*np.pi/2)
-flipper_left = Flipper([300,500], 50,False,0, -np.pi/2)
+Ball(420, 300 , speed= [0,-5])
+#flipper_right = Flipper([400,500], 50,True, np.pi, 3*np.pi/2)
+#flipper_left = Flipper([300,500], 50,False,0, -np.pi/2)
 #Flipper([300,500], 50, 0, np.pi/2)
 
 
-a = Wall([10, 10], [700, 10])
-Wall([10, 10], [10, 400])
-Wall([10, 400], [300, 500])
-Wall([700, 10], [700, 400])
-Wall([700, 400], [400, 500])
+a = Wall([500, 500], [0,500])
+#Wall([10, 10], [10, 400])
+#Wall([10, 400], [300, 500])
+#Wall([700, 10], [700, 400])
+#Wall([700, 400], [10, 400])
 # print(str(a.rotations[0]))
 # print(str(a.rotations[1]))
 # print(str(a.rotations[2]))
-rect(250,50,50)
-Circle(400,200, 30, [1,0])
+#rect(250,50,50)
+#Circle(400,200, 30, [1,0])
 
 
 ### GAME

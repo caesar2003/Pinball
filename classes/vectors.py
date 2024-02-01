@@ -1,5 +1,6 @@
 # imports
 import numpy as np
+import math
 
 class Vector:
     '''
@@ -157,3 +158,4 @@ class Vector:
         self.angle = (self.angle + angle) % (2 * np.pi)
         self.x = abs(self) * np.cos(self.angle)
         self.y = abs(self) * -np.sin(self.angle)
+

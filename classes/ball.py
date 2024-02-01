@@ -5,6 +5,7 @@ sys.path.append(str(Path(__file__).parents[1]))
 
 import numpy as np
 import pygame
+import math
 
 import functions.collisions as coll
 import vars.const as const
@@ -121,22 +122,35 @@ class Ball(pygame.sprite.Sprite):
         for wall in wall_group:
             is_colliding, coll_angle = coll.col_ball_wall(self, wall)
             if is_colliding and self.test:
+                self.coords -= self.speed
                 self.speed.rotate(2*-(coll_angle - self.speed.angle))
                 
         for circle in circle_group:
             is_colliding, coll_angle, col_deep = coll.col_ball_circle(self, circle)
             if is_colliding and self.test:
-                    #self.coords = Vector(self.coords.x + col_deep*np.cos(coll_angle), self.coords.y + col_deep*np.sin(coll_angle))
+                    self.coords -= self.speed
                     self.speed.rotate(2*-(coll_angle - self.speed.angle))
 
         for flipper in flipper_group:
             is_colliding, coll_angle = coll.col_ball_flipper(self, flipper)
             if is_colliding and self.test:
-                    #self.coords = Vector(self.coords.x + col_deep*np.cos(coll_angle), self.coords.y + col_deep*np.sin(coll_angle))
-                    #self.speed.rotate(2*-(coll_angle - self.speed.angle))
-                    print(True)
+                    self.coords -= self.speed
+                    self.speed.rotate(2*-(coll_angle - self.speed.angle))
 
-
+        for ball in ball_group:
+            if self.index != ball.index:
+                is_colliding, coll_angle = coll.col_ball_ball(self, ball)
+                if is_colliding and self.test:
+                        self.coords -= self.speed
+                        ball.coords -= ball.speed
+                        oldss= self.speed
+                        oldbs = ball.speed
+                        self.speed.x = (oldss.x*np.sin(coll_angle)-oldss.y*np.cos(coll_angle))*np.sin(coll_angle)+ (oldbs.x*np.cos(coll_angle)+oldbs.y*np.sin(coll_angle))*np.cos(coll_angle)
+                        self.speed.y = (-oldss.x*np.sin(coll_angle)+oldss.y*np.cos(coll_angle))*np.cos(coll_angle)+ (oldbs.x*np.cos(coll_angle)+oldbs.y*np.sin(coll_angle))*np.sin(coll_angle)
+                        ball.speed.x = (oldbs.x*np.sin(coll_angle)-oldbs.y*np.cos(coll_angle))*np.sin(coll_angle)+ (oldss.x*np.cos(coll_angle)+oldss.y*np.sin(coll_angle))*np.cos(coll_angle)
+                        ball.speed.y = (-oldbs.x*np.sin(coll_angle)+oldbs.y*np.cos(coll_angle))*np.cos(coll_angle)+ (oldss.x*np.cos(coll_angle)+oldss.y*np.sin(coll_angle))*np.sin(coll_angle)
+                        print(ball.speed.x)
+            
         self.draw()
 
         # TODO:
