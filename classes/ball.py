@@ -149,7 +149,6 @@ class Ball(pygame.sprite.Sprite):
                         self.speed.y = (-oldss.x*np.sin(coll_angle)+oldss.y*np.cos(coll_angle))*np.cos(coll_angle)+ (oldbs.x*np.cos(coll_angle)+oldbs.y*np.sin(coll_angle))*np.sin(coll_angle)
                         ball.speed.x = (oldbs.x*np.sin(coll_angle)-oldbs.y*np.cos(coll_angle))*np.sin(coll_angle)+ (oldss.x*np.cos(coll_angle)+oldss.y*np.sin(coll_angle))*np.cos(coll_angle)
                         ball.speed.y = (-oldbs.x*np.sin(coll_angle)+oldbs.y*np.cos(coll_angle))*np.cos(coll_angle)+ (oldss.x*np.cos(coll_angle)+oldss.y*np.sin(coll_angle))*np.sin(coll_angle)
-                        print(ball.speed.x)
             
         self.draw()
 

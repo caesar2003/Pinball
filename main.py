@@ -11,6 +11,7 @@ import functions.collisions as col
 import functions.general as general
 import functions.system as system
 from functions.rectangle import rect
+from functions.logic import new_ball_spawn
 import vars.const as const
 import vars.setup as setup
 from vars.setup import clock
@@ -23,7 +24,6 @@ from vars.setup import wall_group, ball_group, circle_group, flipper_group
 pygame.init()
 
 # preparation
-Ball(420, 300 , speed= [0,-5])
 #flipper_right = Flipper([400,500], 50,True, np.pi, 3*np.pi/2)
 #flipper_left = Flipper([300,500], 50,False,0, -np.pi/2)
 #Flipper([300,500], 50, 0, np.pi/2)
@@ -39,7 +39,7 @@ a = Wall([500, 500], [0,500])
 # print(str(a.rotations[2]))
 #rect(250,50,50)
 #Circle(400,200, 30, [1,0])
-
+ball_count = [False, False] # checks if the ball has reached the y coordinate > 800
 
 ### GAME
 while True:
@@ -52,19 +52,6 @@ while True:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_x:
                 system.close()
-            if event.key == pygame.K_d:
-                flipper_right.rotating = True
-                flipper_right.direction = True
-            if event.key == pygame.K_a:
-                flipper_left.rotating = True
-                flipper_left.direction = False
-        elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_d:
-                flipper_right.rotating = False
-                flipper_right.direction = True
-            if event.key == pygame.K_a:
-                flipper_left.rotating = False
-                flipper_left.direction = False
 
     
     ## Logic
@@ -73,6 +60,9 @@ while True:
     wall_group.update()
     circle_group.update()
     flipper_group.update()
+    new_ball_spawn(ball_group, ball_count) #spawns a new ball when old is gone
+    
+
 
     # update screen
     pygame.display.flip()
