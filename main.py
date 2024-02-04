@@ -7,16 +7,22 @@ from classes.ball import Ball
 from classes.wall import Wall
 from classes.circle import Circle
 from classes.flipper import Flipper
+from classes.shot import Shot
 import functions.collisions as col
 import functions.general as general
 import functions.system as system
 from functions.rectangle import rect
-from functions.logic import new_ball_spawn
+from functions.score import new_ball_spawn
+from functions.events import event
+from functions.score import score
+from functions.score import highscores
+from functions.score import write_highscore
+#from functions.score import save_data
 import vars.const as const
 import vars.setup as setup
 from vars.setup import clock
 from vars.setup import screen, bg, bg_rect, width, height
-from vars.setup import wall_group, ball_group, circle_group, flipper_group
+from vars.setup import wall_group, ball_group, circle_group, flipper_group, shot_group
 # import classes.vectors
 
 
@@ -24,34 +30,26 @@ from vars.setup import wall_group, ball_group, circle_group, flipper_group
 pygame.init()
 
 # preparation
-#flipper_right = Flipper([400,500], 50,True, np.pi, 3*np.pi/2)
-#flipper_left = Flipper([300,500], 50,False,0, -np.pi/2)
-#Flipper([300,500], 50, 0, np.pi/2)
+flipper_right = Flipper([400,500], 200,True, np.pi, 3*np.pi/2)
+flipper_left = Flipper([300,500], 200,False,0, -np.pi/2)
+shot = Shot([100,100], [150, 100])
 
-
-a = Wall([500, 500], [0,500])
+#a = Wall([500, 500], [0,500])
 #Wall([10, 10], [10, 400])
 #Wall([10, 400], [300, 500])
 #Wall([700, 10], [700, 400])
 #Wall([700, 400], [10, 400])
-# print(str(a.rotations[0]))
-# print(str(a.rotations[1]))
-# print(str(a.rotations[2]))
 #rect(250,50,50)
 #Circle(400,200, 30, [1,0])
-ball_count = [False, False] # checks if the ball has reached the y coordinate > 800
-
+ball_count = [False, False, False] # checks if the ball has reached the y coordinate > 800
+current_score=0
+lives = 3
+save_high=highscores()
 ### GAME
 while True:
 
     ## Event Loop
-    for event in pygame.event.get():
-        # close game
-        if event.type == pygame.QUIT:
-            system.close()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_x:
-                system.close()
+    event(flipper_right, flipper_left, shot)     
 
     
     ## Logic
@@ -60,7 +58,10 @@ while True:
     wall_group.update()
     circle_group.update()
     flipper_group.update()
-    new_ball_spawn(ball_group, ball_count) #spawns a new ball when old is gone
+    shot_group.update()
+    write_highscore(save_high)
+    current_score= score(current_score, lives)
+    lives = new_ball_spawn(ball_group, ball_count, lives) #spawns a new ball when old is gone
     
 
 

@@ -145,8 +145,24 @@ def col_ball_flipper(ball, flipper):
     bool: true if collision is happening, else false
     angle: the angle of the collision (vom Lot aus (TODO: Übersetzen))
     '''
-
-    collision = False
+    if distance(ball.coords.values, flipper.coords.values) <= ball.radius:
+        angle= get_angle(ball.coords.values, flipper.coords.values)
+        return True, angle
+    elif distance(ball.coords.values, flipper.coords_end.values) <= ball.radius:
+        angle= get_angle(ball.coords.values, flipper.coords_end.values)
+        return True, angle
+    line_len = distance(flipper.coords.values, flipper.coords_end.values)
+    dot = ((ball.coords.x-flipper.coords.x)* (flipper.coords_end.x-flipper.coords.x)+ (ball.coords.y-flipper.coords.y)* (flipper.coords_end.y-flipper.coords.y))/line_len**2
+    closestx=flipper.coords.x+ (dot*(flipper.coords_end.x-flipper.coords.x))
+    closesty=flipper.coords.y+ (dot*(flipper.coords_end.y-flipper.coords.y))
+    buffer = 0.1
+    d1= distance([closestx, closesty], flipper.coords.values)
+    d2= distance([closestx, closesty], flipper.coords_end.values)
+    if(d1+d2 >= line_len-buffer and d1+d2 <= line_len+buffer):
+        ball_to_line = distance(ball.coords.values, [closestx, closesty])
+        if ball_to_line <= ball.radius:
+            angle = get_angle(ball.coords.values, [closestx, closesty])
+            return True, angle
     return False, 0
 
 def col_ball_ball(ball, ball2):

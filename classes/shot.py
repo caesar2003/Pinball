@@ -6,14 +6,14 @@ import numpy as np
 import pygame
 
 import functions.general as general
-from functions.general import get_angle
+from functions.general import get_angle, distance
 import vars.setup as setup
-from vars.setup import wall_group, flipper_group
+from vars.setup import wall_group, flipper_group, shot_group
 from classes.vectors import Vector
 
 
 # definition of the class
-class Flipper(pygame.sprite.Sprite):
+class Shot(pygame.sprite.Sprite):
     '''
     the class for the flipper
     subclass of pygame.sprite.Sprite to make it compatible with pygame groups
@@ -34,7 +34,7 @@ class Flipper(pygame.sprite.Sprite):
     update: does all the updates of the wall
     '''
 
-    def __init__(self, rot_point, radius,direction, start_angle= np.pi, stop_angle =3*np.pi/2, group = True):
+    def __init__(self, start_point, end_point, group = True):
         '''
         initiation of a flipper object
         
@@ -54,23 +54,16 @@ class Flipper(pygame.sprite.Sprite):
         # check for type of args
         
         super().__init__()
-        if isinstance(rot_point, tuple) or isinstance(rot_point, list) or isinstance(rot_point, np.ndarray):
-            self.coords = Vector(rot_point[0], rot_point[1])
-        #if isinstance(end_point, tuple) or isinstance(end_point, list) or isinstance(end_point, np.ndarray):
-            #self.coords_end = Vector(end_point[0], end_point[1])
-
-        self.radius = radius
-        self.start_angle = start_angle
-        self.stop_angle = stop_angle
-        self.current_angle = start_angle
-        self.coords_end = Vector(self.coords.x +self.radius * np.cos(self.start_angle),self.coords.y+ self.radius * np.sin(self.start_angle))
-        self.rotating = False
-        self.speed = np.pi/50
-        self.direction = direction# True right (clockwise), False left ( counterclockwise)
-
+        if isinstance(start_point, tuple) or isinstance(start_point, list) or isinstance(start_point, np.ndarray):
+            self.coords = Vector(start_point[0], start_point[1])
+        if isinstance(end_point, tuple) or isinstance(end_point, list) or isinstance(end_point, np.ndarray):
+            self.coords_end = Vector(end_point[0], end_point[1])
+        self.start_coords = [self.coords, self.coords_end]
+        self.speed = Vector(0,5)
+        self.pressed = False
         if group:
-            flipper_group.add(self)
-            self.index = len(flipper_group) - 1
+            shot_group.add(self)
+            self.index = len(shot_group) - 1
 
     
     def __str__(self):
@@ -88,27 +81,25 @@ class Flipper(pygame.sprite.Sprite):
 
         returns: None
         '''
-        if self.rotating==True and self.direction==True:
-            self.current_angle += self.speed
-            
-            if self.current_angle > self.stop_angle:
-                self.current_angle = self.stop_angle
-        elif  self.rotating == False and self.direction == True:
-            self.current_angle -= self.speed
-            if self.current_angle < self.start_angle:
-                self.current_angle = self.start_angle
-        elif self.rotating == True and self.direction == False:
-            self.current_angle -= self.speed
-            if self.current_angle < self.stop_angle:
-                self.current_angle = self.stop_angle
-        elif self.rotating == False and self.direction == False:
-            self.current_angle += self.speed
-            if self.current_angle > self.start_angle:
-                self.current_angle = self.start_angle
-        
+        max_dis = 50
+        if self.pressed == True:
+            self.coords+= self.speed
+            self.coords_end+= self.speed
+            if distance(self.start_coords[0].values, self.coords.values)>=max_dis:
+                self.coords.x = self.start_coords[0].x
+                self.coords.y = self.start_coords[0].y +max_dis
+                self.coords_end.x = self.start_coords[1].x
+                self.coords_end.y = self.start_coords[1].y+ max_dis
+        if self.pressed == False:
+            self.coords-= self.speed
+            self.coords_end-= self.speed
+            if distance(self.coords.values, [self.start_coords[0].x, self.start_coords[0].y+50]) >= 50:
+                self.coords.x = self.start_coords[0].x
+                self.coords.y = self.start_coords[0].y
+                self.coords_end.x = self.start_coords[1].x
+                self.coords_end.y = self.start_coords[1].y
 
-        self.coords_end = Vector(self.coords.x +self.radius * np.cos(self.current_angle),self.coords.y+ self.radius * np.sin(self.current_angle))
- 
+        
     def update(self):
         '''
         does all the logic for the walls:

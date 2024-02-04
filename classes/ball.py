@@ -136,6 +136,7 @@ class Ball(pygame.sprite.Sprite):
             if is_colliding and self.test:
                     self.coords -= self.speed
                     self.speed.rotate(2*-(coll_angle - self.speed.angle))
+                    print(is_colliding, coll_angle)
 
         for ball in ball_group:
             if self.index != ball.index:
