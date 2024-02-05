@@ -10,8 +10,10 @@ import math
 import functions.collisions as coll
 import vars.const as const
 import vars.setup as setup
-from vars.setup import ball_group, wall_group, circle_group, flipper_group
+import functions.sound as sound
+from vars.setup import ball_group, wall_group, circle_group, flipper_group, line_group
 from classes.vectors import Vector
+
 
 
 # definition of the
@@ -62,6 +64,7 @@ class Ball(pygame.sprite.Sprite):
 
         self.coords = Vector(x, y)
         self.radius = radius
+        self.reibung = 0.95
 
         if speed is None:
             self.speed = Vector(0, 0)
@@ -132,11 +135,47 @@ class Ball(pygame.sprite.Sprite):
                     self.speed.rotate(2*-(coll_angle - self.speed.angle))
 
         for flipper in flipper_group:
-            is_colliding, coll_angle = coll.col_ball_flipper(self, flipper)
+            is_colliding, normal_vector, v_vector = coll.col_ball_flipper(self, flipper)
+            if is_colliding and self.test:
+                    #self.speed.rotate(2*-(coll_angle - self.speed.angle))
+
+                    dot_product = self.speed.x * normal_vector.x + self.speed.y * normal_vector.y
+                    magnitude_normal = math.sqrt(normal_vector.x ** 2 + normal_vector.y ** 2)
+                    magnitude_speed = math.sqrt(self.speed.x ** 2 + self.speed.y ** 2)
+                    parallel_scalar = dot_product / (magnitude_normal ** 2)
+                    parallel_vector = (normal_vector.x * parallel_scalar, normal_vector.y * parallel_scalar)
+                    perpendicular_vector = (self.speed.x - parallel_vector[0], self.speed.y - parallel_vector[1])
+                    ##Es muss noch die Geschwindigkeit des Kollisionspunktes auf dem Kreis addiert werden 
+                    # Resultierenden Vektor berechnen
+                    if flipper.rotating:
+                        self.coords -= self.speed
+                        self.coords += v_vector+v_vector
+                        self.speed.x = (-parallel_vector[0] + perpendicular_vector[0]+ v_vector.x*0.5)*self.reibung
+                        self.speed.y = (-parallel_vector[1] + perpendicular_vector[1]+ v_vector.y*0.5)*self.reibung
+                    else:
+                        self.coords -= self.speed
+                        self.coords += v_vector
+                        self.speed.x = (-parallel_vector[0] + perpendicular_vector[0])*self.reibung
+                        self.speed.y = (-parallel_vector[1] + perpendicular_vector[1])*self.reibung
+
+                        
+        
+        for line in line_group:
+            is_colliding, normal_vector = coll.col_ball_line(self, line)
             if is_colliding and self.test:
                     self.coords -= self.speed
-                    self.speed.rotate(2*-(coll_angle - self.speed.angle))
-                    print(is_colliding, coll_angle)
+                    #self.speed.rotate(2*-(coll_angle - self.speed.angle))
+                    dot_product = self.speed.x * normal_vector.x + self.speed.y * normal_vector.y
+                    magnitude_normal = math.sqrt(normal_vector.x ** 2 + normal_vector.y ** 2)
+                    magnitude_speed = math.sqrt(self.speed.x ** 2 + self.speed.y ** 2)
+                    parallel_scalar = dot_product / (magnitude_normal ** 2)
+                    parallel_vector = (normal_vector.x * parallel_scalar, normal_vector.y * parallel_scalar)
+                    perpendicular_vector = (self.speed.x - parallel_vector[0], self.speed.y - parallel_vector[1])
+
+                    # Resultierenden Vektor berechnen
+                    self.speed.x = (-parallel_vector[0] + perpendicular_vector[0])*self.reibung
+                    self.speed.y = (-parallel_vector[1] + perpendicular_vector[1])*self.reibung
+
 
         for ball in ball_group:
             if self.index != ball.index:

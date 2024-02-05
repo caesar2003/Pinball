@@ -11,6 +11,7 @@ import functions.general as general
 import functions.system as system
 from functions.rectangle import rect
 from functions.events import event
+import functions.sound as sound
 import vars.const as const
 import vars.setup as setup
 from vars.setup import clock
@@ -35,20 +36,17 @@ def score(current_score, lives):
     return current_score
 
 
-def new_ball_spawn(ball_group, ball_count, lives):
+def new_ball_spawn(ball_group, lives):
     if len(ball_group) == 0:
-        Ball(420, 300 , speed= [-1,-5])
+        Ball(420, 300 , speed= [5,-5])
         lives = 3
-        ball_spawn_sound()
     for ball in ball_group:
         if ball.index == 0 and ball.coords.y > 800 and lives == 3:
             Ball(420, 300 , speed= [-1,-5])
             lives = 2
-            ball_spawn_sound()
         elif ball.index == 1 and ball.coords.y > 800 and lives == 2:
             Ball(420, 300 , speed= [-1,-5])
             lives = 1
-            ball_spawn_sound()
         elif ball.index == 2 and ball.coords.y > 800 and lives ==1:
             lives = 0
 
@@ -78,16 +76,15 @@ def highscores():
 
 def write_highscore(highscores):
     i = 1
+    a = 20
     for highscore in highscores:
         font = pygame.font.SysFont(None, 36)
         text = font.render(f"{i}. {highscore}", True, 'RED')
         # Textposition
         text_rect = text.get_rect()
-        text_rect.center = (width // 3, height // i)  
+        text_rect.center = (width // 3, a)  
         screen.blit(text, text_rect)
         i+=1
+        a+=20
 
-def ball_spawn_sound():
-        ball_sound = pygame.mixer.Sound("ball_respawn_sound.mp3")
-        ball_sound.set_volume(0.5)
-        ball_sound.play()
+

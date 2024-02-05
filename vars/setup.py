@@ -25,6 +25,7 @@ ball_group = pygame.sprite.Group()
 circle_group = pygame.sprite.Group()
 flipper_group = pygame.sprite.Group()
 shot_group = pygame.sprite.Group()
+line_group = pygame.sprite.Group()
 
 #ball
 ball_rad = 20

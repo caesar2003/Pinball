@@ -10,6 +10,7 @@ import math
 # from classes.wall import Wall
 import vars.setup as setup
 from functions.general import distance, get_angle
+from classes.vectors import Vector
 
 
 # functions
@@ -146,11 +147,13 @@ def col_ball_flipper(ball, flipper):
     angle: the angle of the collision (vom Lot aus (TODO: Übersetzen))
     '''
     if distance(ball.coords.values, flipper.coords.values) <= ball.radius:
-        angle= get_angle(ball.coords.values, flipper.coords.values)
-        return True, angle
+        closestx, closesty = flipper.coords_end.x, flipper.coords_end.y
+        normal_vector= Vector(ball.coords.x -closestx, ball.coords.y -closesty )
+        return True, normal_vector, Vector(0,0)
     elif distance(ball.coords.values, flipper.coords_end.values) <= ball.radius:
-        angle= get_angle(ball.coords.values, flipper.coords_end.values)
-        return True, angle
+        closestx, closesty = flipper.coords_end.x, flipper.coords_end.y
+        normal_vector= Vector(ball.coords.x -closestx, ball.coords.y -closesty )
+        return True, normal_vector, Vector(0,0)
     line_len = distance(flipper.coords.values, flipper.coords_end.values)
     dot = ((ball.coords.x-flipper.coords.x)* (flipper.coords_end.x-flipper.coords.x)+ (ball.coords.y-flipper.coords.y)* (flipper.coords_end.y-flipper.coords.y))/line_len**2
     closestx=flipper.coords.x+ (dot*(flipper.coords_end.x-flipper.coords.x))
@@ -161,9 +164,48 @@ def col_ball_flipper(ball, flipper):
     if(d1+d2 >= line_len-buffer and d1+d2 <= line_len+buffer):
         ball_to_line = distance(ball.coords.values, [closestx, closesty])
         if ball_to_line <= ball.radius:
-            angle = get_angle(ball.coords.values, [closestx, closesty])
-            return True, angle
+            normal_vector= Vector(ball.coords.x -closestx, ball.coords.y -closesty)
+            normal_vector_norm = Vector(normal_vector.x/normal_vector.__abs__(), normal_vector.y/normal_vector.__abs__())
+            abs_v = distance([closestx, closesty], flipper.coords.values)* flipper.speed
+            v_vector = Vector(abs_v * normal_vector_norm.x, abs_v * normal_vector_norm.y)
+            return True, normal_vector, v_vector
+    return False, 0, Vector(0,0)
+
+def col_ball_line(ball, line):
+    '''
+    checks for collision of ball and circle
+    
+    args:
+    ball (class: Ball): the ball to check
+    circle (class: Circle): the circle to check
+    
+    returns:
+    bool: true if collision is happening, else false
+    angle: the angle of the collision (vom Lot aus (TODO: Übersetzen))
+    '''
+    if distance(ball.coords.values, line.coords.values) <= ball.radius:
+        closestx, closesty = line.coords_end.x, line.coords_end.y
+        normal_vector= Vector(ball.coords.x -closestx, ball.coords.y -closesty )
+        return True,normal_vector
+    elif distance(ball.coords.values, line.coords_end.values) <= ball.radius:
+        closestx, closesty = line.coords_end.x, line.coords_end.y
+        normal_vector= Vector(ball.coords.x -closestx, ball.coords.y -closesty )
+        return True, normal_vector
+    line_len = distance(line.coords.values, line.coords_end.values)
+    dot = ((ball.coords.x-line.coords.x)* (line.coords_end.x-line.coords.x)+ (ball.coords.y-line.coords.y)* (line.coords_end.y-line.coords.y))/line_len**2
+    closestx=line.coords.x+ (dot*(line.coords_end.x-line.coords.x))
+    closesty=line.coords.y+ (dot*(line.coords_end.y-line.coords.y))
+    buffer = 0.1
+    d1= distance([closestx, closesty], line.coords.values)
+    d2= distance([closestx, closesty], line.coords_end.values)
+    if(d1+d2 >= line_len-buffer and d1+d2 <= line_len+buffer):
+        ball_to_line = distance(ball.coords.values, [closestx, closesty])
+        if ball_to_line <= ball.radius:
+            normal_vector= Vector(ball.coords.x -closestx, ball.coords.y -closesty )
+            return True, normal_vector
+        
     return False, 0
+
 
 def col_ball_ball(ball, ball2):
     '''

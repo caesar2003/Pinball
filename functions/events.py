@@ -22,16 +22,16 @@ def event(flipper_right, flipper_left, shot):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_x:
                     system.close()
-                if event.key == pygame.K_a:
-                    flipper_right.rotating = True
                 if event.key == pygame.K_d:
+                    flipper_right.rotating = True
+                if event.key == pygame.K_a:
                     flipper_left.rotating = True
                 if event.key == pygame.K_SPACE:
                     shot.pressed = True
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_a:
-                    flipper_right.rotating = False
                 if event.key == pygame.K_d:
+                    flipper_right.rotating = False
+                if event.key == pygame.K_a:
                     flipper_left.rotating = False
                 if event.key == pygame.K_SPACE:
                     shot.pressed = False
