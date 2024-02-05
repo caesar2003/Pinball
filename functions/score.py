@@ -28,7 +28,7 @@ def score(current_score, lives):
     text_rect.center = (width / 2, height-20)  
     screen.blit(text, text_rect)
     if lives == 0 and not score_written:
-        with open("data.txt", "a") as file:
+        with open("sonstiges/data.txt", "a") as file:
                 file.write(f'{round(current_score)}\n')
                 score_written = True
     elif lives!= 0:
@@ -74,7 +74,7 @@ def new_ball_spawn(ball_group, lives):
 
 def highscores():
     try:
-        with open('data.txt', "r") as file:
+        with open('sonstiges/data.txt', "r") as file:
             lines = file.readlines()
             data = [line.strip() for line in lines]  # Strip newline characters and store each line in a list
             data = list(map(int, data))
