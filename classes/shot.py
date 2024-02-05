@@ -34,7 +34,7 @@ class Shot(pygame.sprite.Sprite):
     update: does all the updates of the wall
     '''
 
-    def __init__(self, start_point, end_point, group = True):
+    def __init__(self, start_point, end_point,speed, distance, group = True):
         '''
         initiation of a flipper object
         
@@ -59,8 +59,11 @@ class Shot(pygame.sprite.Sprite):
         if isinstance(end_point, tuple) or isinstance(end_point, list) or isinstance(end_point, np.ndarray):
             self.coords_end = Vector(end_point[0], end_point[1])
         self.start_coords = [self.coords, self.coords_end]
-        self.speed = Vector(0,5)
+        self.speed = speed
+        self.distance = distance
         self.pressed = False
+        self.nv = Vector(0,-1)
+        self.check_velocity= False
         if group:
             shot_group.add(self)
             self.index = len(shot_group) - 1
@@ -81,24 +84,22 @@ class Shot(pygame.sprite.Sprite):
 
         returns: None
         '''
-        max_dis = 50
-        if self.pressed == True:
-            self.coords+= self.speed
-            self.coords_end+= self.speed
-            if distance(self.start_coords[0].values, self.coords.values)>=max_dis:
-                self.coords.x = self.start_coords[0].x
-                self.coords.y = self.start_coords[0].y +max_dis
-                self.coords_end.x = self.start_coords[1].x
-                self.coords_end.y = self.start_coords[1].y+ max_dis
-        if self.pressed == False:
-            self.coords-= self.speed
-            self.coords_end-= self.speed
-            if distance(self.coords.values, [self.start_coords[0].x, self.start_coords[0].y+50]) >= 50:
-                self.coords.x = self.start_coords[0].x
-                self.coords.y = self.start_coords[0].y
-                self.coords_end.x = self.start_coords[1].x
-                self.coords_end.y = self.start_coords[1].y
-
+        if self.pressed:
+            self.coords += Vector(self.nv.x*self.speed, self.nv.y*self.speed)
+            self.coords_end += Vector(self.nv.x*self.speed, self.nv.y*self.speed)
+            self.check_velocity = True
+            if distance([self.start_coords[0].x,self.start_coords[0].y], [self.coords.x, self.coords.y]) >= self.distance:
+                self.check_velocity = False
+                self.coords = Vector(self.start_coords[0].x+self.nv.x*self.distance, self.start_coords[0].y+self.nv.y*self.distance)
+                self.coords_end= Vector(self.start_coords[1].x+self.nv.x*self.distance, self.start_coords[1].y+self.nv.y*self.distance)
+        else:
+            self.coords -= Vector(self.nv.x*self.speed, self.nv.y*self.speed)
+            self.coords_end -= Vector(self.nv.x*self.speed, self.nv.y*self.speed)
+            self.check_velocity = False
+            if distance([self.start_coords[0].x+self.nv.x*self.distance,self.start_coords[0].y+self.nv.y*self.distance], [self.coords.x, self.coords.y])- self.distance >=0:
+                self.check_velocity = False
+                self.coords = self.start_coords[0]
+                self.coords_end = self.start_coords[1]
         
     def update(self):
         '''

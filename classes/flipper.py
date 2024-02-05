@@ -67,7 +67,7 @@ class Flipper(pygame.sprite.Sprite):
         self.rotating = False
         self.speed = np.pi/50
         self.direction = direction# True right (clockwise), False left ( counterclockwise)
-
+        self.check_velocity = False
         if group:
             flipper_group.add(self)
             self.index = len(flipper_group) - 1
@@ -90,20 +90,27 @@ class Flipper(pygame.sprite.Sprite):
         '''
         if self.rotating==True and self.direction==True:
             self.current_angle += self.speed
-            
+            self.check_velocity = True
             if self.current_angle > self.stop_angle:
                 self.current_angle = self.stop_angle
+                self.check_velocity = False
         elif  self.rotating == False and self.direction == True:
             self.current_angle -= self.speed
+            self.check_velocity = True
             if self.current_angle < self.start_angle:
                 self.current_angle = self.start_angle
+                self.check_velocity = False
         elif self.rotating == True and self.direction == False:
             self.current_angle -= self.speed
+            self.check_velocity = True
             if self.current_angle < self.stop_angle:
+                self.check_velocity = False
                 self.current_angle = self.stop_angle
         elif self.rotating == False and self.direction == False:
             self.current_angle += self.speed
+            self.check_velocity = True
             if self.current_angle > self.start_angle:
+                self.check_velocity = False
                 self.current_angle = self.start_angle
         
 

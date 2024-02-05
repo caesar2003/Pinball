@@ -11,3 +11,7 @@ def drehden():
     ball_sound = pygame.mixer.Sound("DrehdenSwagauf.wav")
     ball_sound.set_volume(1.0)
     ball_sound.play()
+def background_music():
+    ball_sound = pygame.mixer.Sound("backgroundmusic.mp3")
+    ball_sound.set_volume(0.05)
+    ball_sound.play()

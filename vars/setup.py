@@ -13,8 +13,8 @@ clock = pygame.time.Clock()
 fps = 60
 
 # screen
-width = 800
-height = 600
+width = 600
+height = 700
 screen = pygame.display.set_mode((width, height))#, pygame.RESIZABLE
 bg = pygame.image.load('graphics/bkg.jpg')
 bg_rect = bg.get_rect(topleft = (0, 0))
@@ -28,4 +28,4 @@ shot_group = pygame.sprite.Group()
 line_group = pygame.sprite.Group()
 
 #ball
-ball_rad = 20
+ball_rad = 18

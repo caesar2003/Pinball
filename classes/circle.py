@@ -75,7 +75,7 @@ class Circle(pygame.sprite.Sprite):
             self.index = len(circle_group) - 1
 
         self.test = True
-
+        self.color = 'black'
     def __str__(self):
         '''
         returns attributes of the ball
@@ -88,7 +88,7 @@ class Circle(pygame.sprite.Sprite):
 
 
     def draw(self):
-        pygame.draw.circle(setup.screen, 'black', self.coords.values, self.radius)
+        pygame.draw.circle(setup.screen, self.color, self.coords.values, self.radius)
 
 
     def move(self):
@@ -98,7 +98,7 @@ class Circle(pygame.sprite.Sprite):
 
         returns: None
         '''
-        if self.coords.x >700 or self.coords.x < 100:
+        if self.coords.x >setup.width*0.75 or self.coords.x < setup.width*0.25:
             self.speed = Vector(-self.speed.x, self.speed.y)
         self.coords+= self.speed
 
@@ -115,12 +115,6 @@ class Circle(pygame.sprite.Sprite):
         '''
         
         self.move()
-        """
-        for wall in wall_group:
-            is_colliding, coll_angle = coll.col_ball_wall(self, wall)
-            if is_colliding and self.test:
-                self.speed.rotate(2 * -(coll_angle - self.speed.angle))
-        """
         self.draw()
 
         # TODO:
@@ -128,25 +122,6 @@ class Circle(pygame.sprite.Sprite):
         # collision checks
 
     
-    def rotate(self, angle):
-        '''
-        rotate the coordinates of a ball by a given angle
-
-        args:
-        ball (class: Ball): The ball of which the coordinates will be rotated
-        angle (in rad): The angle to rotate the coordinates
-
-        returns:
-        a new instance of class Ball
-        '''
-
-        old_coords = self.coords.values # coordinates as numpy array (see: classes.vectors)
-        old_speed = self.speed.values
-        rotation = np.array([[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]]) # rotation matrix (clockwise due to the positive y direction being downwards)
-        new_coords = np.dot(old_coords, rotation).tolist()
-        new_speed = np.dot(old_speed, rotation).tolist()
-
-        return Circle(*new_coords, self.radius, speed = new_speed, group = False)
 
 
 

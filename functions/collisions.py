@@ -12,108 +12,6 @@ import vars.setup as setup
 from functions.general import distance, get_angle
 from classes.vectors import Vector
 
-
-# functions
-
-# def rotate_wall(wall):
-#     '''
-#     rotates a wall to make one angle 0 at a time
-
-#     args:
-#     wall (class: Wall): The wall to be rotated
-
-#     yields:
-#     a new instance of class Wall for each angle
-
-
-#     optional TODO to speed up the code:
-#     dont rotate the whole wall but instead just the side to be turned to zero
-#     '''
-
-#     for angle in wall.angles:
-#         new_coords = []
-        
-#         for i in range(len(wall.coords)):
-#             old_coords = np.array([wall.coords[i][0], wall.coords[i][1]])
-#             rotation = np.array([[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]]) # rotation matrix (clockwise due to the positive y direction being downwards)
-#             new_coords += [np.dot(old_coords, rotation).tolist()]
-            
-#         yield Wall(*new_coords, group = False)
-
-# testing of rotate_wall
-# a = Wall([10, 0], [0, 0], [5, 5], group = False)
-# a_rot = rotate_wall(a)
-# for i in range(3):
-#     print(next(a_rot).angles)
-
-
-# def rotate_ball(ball, angle):
-#     '''
-#     rotate the coordinates of a ball by a given angle
-
-#     args:
-#     ball (class: Ball): The ball of which the coordinates will be rotated
-#     angle (in rad): The angle to rotate the coordinates
-
-#     returns:
-#     a new instance of class Ball
-#     '''
-
-#     old_coords = ball.coords.values # coordinates as numpy array (see: classes.vectors)
-#     rotation = np.array([[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]]) # rotation matrix (clockwise due to the positive y direction being downwards)
-#     new_coords = np.dot(old_coords, rotation).tolist()
-
-#     return Ball(*new_coords, ball.radius, group = False)
-
-# testing of rotate_ball
-# b = Ball(1, 0, setup.ball_rad)
-# print(rotate_ball(b, np.radians(90)).coords)
-
-
-def col_ball_wall(ball, wall):
-    '''
-    checks for collision of ball and wall
-    
-    args:
-    ball (class: Ball): the ball to check
-    wall (class: Wall): the wall to check
-    
-    returns:
-    bool: true if collision is happening, else false
-    angle: the angle of the collision (vom Lot aus (TODO: Übersetzen))
-    '''
-
-    collision = False
-
-    for i in range(len(wall.angles)):
-        angle = wall.angles[i]
-
-        rot_ball = ball.rotate(angle)
-        rot_wall = wall.rotations[i]
-
-        j = i + 1
-        if j == len(wall.angles):
-            j = 0
-        
-        
-        if rot_wall.coords[i][0] <= rot_ball.coords.x <= rot_wall.coords[j][0]\
-            or rot_wall.coords[j][0] <= rot_ball.coords.x <= rot_wall.coords[i][0]:
-
-            if abs(rot_ball.coords.y - rot_wall.coords[i][1]) <= ball.radius:
-                angle = wall.angles[i]
-                return True, angle # TODO: check for remaining distance
-            
-    for i in range(len(wall.coords)):
-        if distance(ball.coords.values, wall.coords[i]) <= ball.radius:
-            angle = get_angle(ball.coords.values, wall.coords[i])
-            return True, angle # TODO: check for remaining distance
-    
-    return False, 0
-
-
-        # TODO:
-        # check for remaining distance and add it to the coordinates of the ball
-
 def col_ball_circle(ball, circle):
     '''
     checks for collision of ball and circle
@@ -129,10 +27,12 @@ def col_ball_circle(ball, circle):
 
     collision = False
     if distance(ball.coords.values, circle.coords.values) <= ball.radius + circle.radius:
-        angle= get_angle(ball.coords.values, circle.coords.values)
-        return True, angle, abs(distance(ball.coords.values, circle.coords.values) - (ball.radius + circle.radius))
+        normal_vector= Vector(ball.coords.x -circle.coords.x, ball.coords.y -circle.coords.y)
+        
+        return True, normal_vector
     else:
-        return False, 0, 0
+        return False, 0
+
     
 def col_ball_flipper(ball, flipper):
     '''
@@ -149,11 +49,18 @@ def col_ball_flipper(ball, flipper):
     if distance(ball.coords.values, flipper.coords.values) <= ball.radius:
         closestx, closesty = flipper.coords_end.x, flipper.coords_end.y
         normal_vector= Vector(ball.coords.x -closestx, ball.coords.y -closesty )
-        return True, normal_vector, Vector(0,0)
+        normal_vector_norm = Vector(normal_vector.x/normal_vector.__abs__(), normal_vector.y/normal_vector.__abs__())
+        abs_v = distance([closestx, closesty], flipper.coords.values)* flipper.speed
+        v_vector = Vector(abs_v * normal_vector_norm.x, abs_v * normal_vector_norm.y)
+        return True, normal_vector, v_vector
     elif distance(ball.coords.values, flipper.coords_end.values) <= ball.radius:
         closestx, closesty = flipper.coords_end.x, flipper.coords_end.y
         normal_vector= Vector(ball.coords.x -closestx, ball.coords.y -closesty )
-        return True, normal_vector, Vector(0,0)
+        normal_vector_norm = Vector(normal_vector.x/normal_vector.__abs__(), normal_vector.y/normal_vector.__abs__())
+        abs_v = distance([closestx, closesty], flipper.coords.values)* flipper.speed
+        v_vector = Vector(abs_v * normal_vector_norm.x, abs_v * normal_vector_norm.y)
+        return True, normal_vector, v_vector
+    
     line_len = distance(flipper.coords.values, flipper.coords_end.values)
     dot = ((ball.coords.x-flipper.coords.x)* (flipper.coords_end.x-flipper.coords.x)+ (ball.coords.y-flipper.coords.y)* (flipper.coords_end.y-flipper.coords.y))/line_len**2
     closestx=flipper.coords.x+ (dot*(flipper.coords_end.x-flipper.coords.x))
@@ -206,6 +113,41 @@ def col_ball_line(ball, line):
         
     return False, 0
 
+def col_ball_shot(ball, shot):
+    '''
+    checks for collision of ball and circle
+    
+    args:
+    ball (class: Ball): the ball to check
+    circle (class: Circle): the circle to check
+    
+    returns:
+    bool: true if collision is happening, else false
+    angle: the angle of the collision (vom Lot aus (TODO: Übersetzen))
+    '''
+    if distance(ball.coords.values, shot.coords.values) <= ball.radius:
+        closestx, closesty = shot.coords_end.x, shot.coords_end.y
+        normal_vector= Vector(ball.coords.x -closestx, ball.coords.y -closesty )
+        return True,normal_vector
+    elif distance(ball.coords.values, shot.coords_end.values) <= ball.radius:
+        closestx, closesty = shot.coords_end.x, shot.coords_end.y
+        normal_vector= Vector(ball.coords.x -closestx, ball.coords.y -closesty )
+        return True, normal_vector
+    shot_len = distance(shot.coords.values, shot.coords_end.values)
+    dot = ((ball.coords.x-shot.coords.x)* (shot.coords_end.x-shot.coords.x)+ (ball.coords.y-shot.coords.y)* (shot.coords_end.y-shot.coords.y))/shot_len**2
+    closestx=shot.coords.x+ (dot*(shot.coords_end.x-shot.coords.x))
+    closesty=shot.coords.y+ (dot*(shot.coords_end.y-shot.coords.y))
+    buffer = 0.1
+    d1= distance([closestx, closesty], shot.coords.values)
+    d2= distance([closestx, closesty], shot.coords_end.values)
+    if(d1+d2 >= shot_len-buffer and d1+d2 <= shot_len+buffer):
+        ball_to_shot = distance(ball.coords.values, [closestx, closesty])
+        if ball_to_shot <= ball.radius:
+            normal_vector= Vector(ball.coords.x -closestx, ball.coords.y -closesty )
+            return True, normal_vector
+        
+    return False, 0
+
 
 def col_ball_ball(ball, ball2):
     '''
@@ -222,10 +164,11 @@ def col_ball_ball(ball, ball2):
 
     collision = False
     if distance(ball.coords.values, ball2.coords.values) <= ball.radius + ball2.radius:
-        angle= get_angle(ball.coords.values, ball2.coords.values)
-        return True, angle
+        normal_vector= Vector(ball.coords.x -ball2.coords.x, ball.coords.y -ball2.coords.y)
+        normal_vector_norm = Vector(normal_vector.x/normal_vector.__abs__(), normal_vector.y/normal_vector.__abs__())
+        return True, normal_vector_norm
     else:
-        return False, 0
+        return False,Vector(0,0)
 
     
 

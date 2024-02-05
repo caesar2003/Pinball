@@ -1,7 +1,7 @@
 from pathlib import Path
 import sys
 sys.path.append(str(Path(__file__).parents[1]))
-from classes.wall import Wall
+from classes.line import Line
 
 import numpy as np
 import pygame
@@ -9,10 +9,10 @@ import pygame
 import functions.general as general
 from functions.general import get_angle
 import vars.setup as setup
-from vars.setup import wall_group
+from vars.setup import line_group
 
 def rect(center, width, height):
-    top = Wall([center-width/2, center+height/2], [center+width/2, center+height/2])
-    right = Wall([center+width/2, center+height/2], [center+width/2, center-height/2])
-    bottom = Wall([center+width/2, center-height/2], [center-width/2, center-height/2])
-    left = Wall([center-width/2, center-height/2], [center-width/2, center+height/2])
+    top = Line([center[0]-width/2, center[1]+height/2], [center[0]+width/2, center[1]+height/2])
+    right = Line([center[0]+width/2, center[1]+height/2], [center[0]+width/2,center[1]-height/2])
+    bottom = Line([center[0]+width/2, center[1]-height/2], [center[0]-width/2, center[1]-height/2])
+    left = Line([center[0]-width/2, center[1]-height/2], [center[0]-width/2, center[1]+height/2])
