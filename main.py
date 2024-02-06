@@ -75,7 +75,6 @@ while True:
         lives = new_ball_spawn(ball_group, lives) #spawns a new ball when old is gone
         current_score, lives= score(current_score, lives)
 
-
         # update screen
         pygame.display.flip()
         clock.tick(setup.fps)

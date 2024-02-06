@@ -22,10 +22,10 @@ score_written = False
 def score(current_score, lives):
     global score_written
     font = pygame.font.SysFont(None, 36)
-    text = font.render(f'Score:{round(current_score)}', True, 'Blue')
+    text = font.render(f'Score:{round(current_score)}', True, (237, 178, 106))
     # Textposition
     text_rect = text.get_rect()
-    text_rect.center = (width / 2, height-20)  
+    text_rect.center = (width / 2-30, height-20)  
     screen.blit(text, text_rect)
     if lives == 0 and not score_written:
         with open("sonstiges/data.txt", "a") as file:
@@ -68,10 +68,13 @@ def new_ball_spawn(ball_group, lives):
 
     
     font = pygame.font.SysFont(None, 36)
-    text = font.render(f"{lives} lives left", True, 'Green')
+    if lives==1:
+        text = font.render(f"{lives} live left", True, (223, 207, 190))
+    else:
+        text = font.render(f"{lives} lives left", True, (223, 207, 190))
     # Textposition
     text_rect = text.get_rect()
-    text_rect.center = (width/2, 50)  
+    text_rect.center = (width/2-50, 25)  
     screen.blit(text, text_rect)
     return lives
 
@@ -89,13 +92,13 @@ def highscores():
 
 def write_highscore(highscores):
     i = 1
-    a = 20
+    a = 15
     for highscore in highscores:
         font = pygame.font.SysFont(None, 36)
-        text = font.render(f"{i}. {highscore}", True, 'RED')
+        text = font.render(f"{i}. {highscore}", True, (79, 120, 155))
         # Textposition
         text_rect = text.get_rect()
-        text_rect.center = (50, a)  
+        text_rect.topleft = (20, a)  
         screen.blit(text, text_rect)
         i+=1
         a+=20

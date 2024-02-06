@@ -135,6 +135,7 @@ class Ball(pygame.sprite.Sprite):
                     parallel_scalar = dot_product / (magnitude_normal ** 2)
                     parallel_vector = (normal_vector.x * parallel_scalar, normal_vector.y * parallel_scalar)
                     perpendicular_vector = (self.speed.x - parallel_vector[0], self.speed.y - parallel_vector[1])
+                    # Resultierende Geschwindigkeiten
                     # Resultierenden Vektor berechnen
                     self.speed.x = (-parallel_vector[0] + perpendicular_vector[0])*self.energy
                     self.speed.y = (-parallel_vector[1] + perpendicular_vector[1])*self.energy

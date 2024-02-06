@@ -75,7 +75,7 @@ class Circle(pygame.sprite.Sprite):
             self.index = len(circle_group) - 1
 
         self.test = True
-        self.color = 'black'
+        self.color = (46, 26, 43)
         self.original_color = 'black'
     def __str__(self):
         '''
