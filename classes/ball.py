@@ -209,7 +209,6 @@ class Ball(pygame.sprite.Sprite):
                 is_colliding, normal_vector = coll.col_ball_ball(self, ball)
                 if is_colliding and self.test:
                         self.coords -= self.speed
-                        ball.coords -= ball.speed
                         # Geschwindigkeiten umrechnen
                         
                         dot_product1 = self.speed.x * normal_vector.x + self.speed.y * normal_vector.y

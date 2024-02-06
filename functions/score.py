@@ -36,7 +36,7 @@ def score(current_score, lives):
     for ball in ball_group:
         if ball.ball_coll:
             current_score+=15
-            print('True')
+            sound.bumpsound()
     return current_score, lives
 
 def new_ball():
@@ -47,15 +47,18 @@ def new_ball_spawn(ball_group, lives):
     ball_coord_death = 700
     if len(ball_group) == 0 and lives==3:
         new_ball()
+        sound.new_ball_sound()
         lives = 3
     for ball in ball_group:
         if ball.index == 0 and ball.coords.y > ball_coord_death and lives == 3:
             ball.kill()
             new_ball()
+            sound.new_ball_sound()
             lives = 2
         elif ball.index == 0 and ball.coords.y > ball_coord_death and lives == 2:
             ball.kill()
             new_ball()
+            sound.new_ball_sound()
             lives = 1
         elif ball.index == 0 and ball.coords.y > ball_coord_death and lives ==1:
             ball.kill()

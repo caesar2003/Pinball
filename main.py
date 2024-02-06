@@ -74,8 +74,6 @@ while True:
         write_highscore(save_high)
         lives = new_ball_spawn(ball_group, lives) #spawns a new ball when old is gone
         current_score, lives= score(current_score, lives)
-        
-        
 
 
         # update screen

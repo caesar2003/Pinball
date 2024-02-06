@@ -76,6 +76,7 @@ class Circle(pygame.sprite.Sprite):
 
         self.test = True
         self.color = 'black'
+        self.original_color = 'black'
     def __str__(self):
         '''
         returns attributes of the ball
@@ -101,6 +102,7 @@ class Circle(pygame.sprite.Sprite):
         if self.coords.x >setup.width*0.75 or self.coords.x < setup.width*0.25:
             self.speed = Vector(-self.speed.x, self.speed.y)
         self.coords+= self.speed
+
 
     
     def update(self):
