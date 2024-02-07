@@ -78,8 +78,9 @@ class Ball(pygame.sprite.Sprite):
             raise TypeError(f'type not supported (yet). Already supported types for argument "speed" are NoneType, tuple, list, numpy.ndarray and Vector. Given argument is from type {type(speed)}')
 
         if group:
+            self.index = max([0]+[ball.index for ball in ball_group]) + 1
             ball_group.add(self)
-            self.index = len(ball_group) - 1
+            
 
         self.test = True
 

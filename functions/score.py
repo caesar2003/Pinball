@@ -50,17 +50,17 @@ def new_ball_spawn(ball_group, lives):
         sound.new_ball_sound()
         lives = 3
     for ball in ball_group:
-        if ball.index == 0 and ball.coords.y > ball_coord_death and lives == 3:
+        if  ball.coords.y > ball_coord_death and lives == 3:
             ball.kill()
             new_ball()
             sound.new_ball_sound()
             lives = 2
-        elif ball.index == 0 and ball.coords.y > ball_coord_death and lives == 2:
+        elif ball.coords.y > ball_coord_death and lives == 2:
             ball.kill()
             new_ball()
             sound.new_ball_sound()
             lives = 1
-        elif ball.index == 0 and ball.coords.y > ball_coord_death and lives ==1:
+        elif ball.coords.y > ball_coord_death and lives ==1:
             ball.kill()
             lives = 0
 
