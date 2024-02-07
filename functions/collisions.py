@@ -52,14 +52,16 @@ def col_ball_flipper(ball, flipper):
         normal_vector_norm = Vector(normal_vector.x/normal_vector.__abs__(), normal_vector.y/normal_vector.__abs__())
         abs_v = distance([closestx, closesty], flipper.coords.values)* flipper.speed
         v_vector = Vector(abs_v * normal_vector_norm.x, abs_v * normal_vector_norm.y)
-        return True, normal_vector, v_vector
+        col_deep = abs(distance([ball.coords.x, ball.coords.y], [closestx, closesty])-ball.radius)
+        return True, normal_vector, v_vector, col_deep
     elif distance(ball.coords.values, flipper.coords_end.values) <= ball.radius:
         closestx, closesty = flipper.coords_end.x, flipper.coords_end.y
         normal_vector= Vector(ball.coords.x -closestx, ball.coords.y -closesty )
         normal_vector_norm = Vector(normal_vector.x/normal_vector.__abs__(), normal_vector.y/normal_vector.__abs__())
         abs_v = distance([closestx, closesty], flipper.coords.values)* flipper.speed
         v_vector = Vector(abs_v * normal_vector_norm.x, abs_v * normal_vector_norm.y)
-        return True, normal_vector, v_vector
+        col_deep = abs(distance([ball.coords.x, ball.coords.y], [closestx, closesty])-ball.radius)
+        return True, normal_vector, v_vector, col_deep
     
     line_len = distance(flipper.coords.values, flipper.coords_end.values)
     dot = ((ball.coords.x-flipper.coords.x)* (flipper.coords_end.x-flipper.coords.x)+ (ball.coords.y-flipper.coords.y)* (flipper.coords_end.y-flipper.coords.y))/line_len**2
@@ -75,8 +77,9 @@ def col_ball_flipper(ball, flipper):
             normal_vector_norm = Vector(normal_vector.x/normal_vector.__abs__(), normal_vector.y/normal_vector.__abs__())
             abs_v = distance([closestx, closesty], flipper.coords.values)* flipper.speed
             v_vector = Vector(abs_v * normal_vector_norm.x, abs_v * normal_vector_norm.y)
-            return True, normal_vector, v_vector
-    return False, 0, Vector(0,0)
+            col_deep = abs(distance([ball.coords.x, ball.coords.y], [closestx, closesty])-ball.radius)
+            return True, normal_vector, v_vector, col_deep
+    return False, 0, Vector(0,0), 0
 
 def col_ball_line(ball, line):
     '''
@@ -93,11 +96,13 @@ def col_ball_line(ball, line):
     if distance(ball.coords.values, line.coords.values) <= ball.radius:
         closestx, closesty = line.coords_end.x, line.coords_end.y
         normal_vector= Vector(ball.coords.x -closestx, ball.coords.y -closesty )
-        return True,normal_vector
+        col_deep = abs(distance([ball.coords.x, ball.coords.y], [closestx, closesty])-ball.radius)
+        return True,normal_vector, col_deep
     elif distance(ball.coords.values, line.coords_end.values) <= ball.radius:
         closestx, closesty = line.coords_end.x, line.coords_end.y
         normal_vector= Vector(ball.coords.x -closestx, ball.coords.y -closesty )
-        return True, normal_vector
+        col_deep = abs(distance([ball.coords.x, ball.coords.y], [closestx, closesty])-ball.radius)
+        return True, normal_vector, col_deep
     line_len = distance(line.coords.values, line.coords_end.values)
     dot = ((ball.coords.x-line.coords.x)* (line.coords_end.x-line.coords.x)+ (ball.coords.y-line.coords.y)* (line.coords_end.y-line.coords.y))/line_len**2
     closestx=line.coords.x+ (dot*(line.coords_end.x-line.coords.x))
@@ -109,9 +114,10 @@ def col_ball_line(ball, line):
         ball_to_line = distance(ball.coords.values, [closestx, closesty])
         if ball_to_line <= ball.radius:
             normal_vector= Vector(ball.coords.x -closestx, ball.coords.y -closesty )
-            return True, normal_vector
+            col_deep = abs(distance([ball.coords.x, ball.coords.y], [closestx, closesty])-ball.radius)
+            return True, normal_vector, col_deep
         
-    return False, 0
+    return False, 0, 0
 
 def col_ball_shot(ball, shot):
     '''
@@ -128,11 +134,13 @@ def col_ball_shot(ball, shot):
     if distance(ball.coords.values, shot.coords.values) <= ball.radius:
         closestx, closesty = shot.coords_end.x, shot.coords_end.y
         normal_vector= Vector(ball.coords.x -closestx, ball.coords.y -closesty )
-        return True,normal_vector
+        col_deep = abs(distance([ball.coords.x, ball.coords.y], [closestx, closesty])-ball.radius)
+        return True,normal_vector, col_deep
     elif distance(ball.coords.values, shot.coords_end.values) <= ball.radius:
         closestx, closesty = shot.coords_end.x, shot.coords_end.y
         normal_vector= Vector(ball.coords.x -closestx, ball.coords.y -closesty )
-        return True, normal_vector
+        col_deep = abs(distance([ball.coords.x, ball.coords.y], [closestx, closesty])-ball.radius)
+        return True, normal_vector, col_deep
     shot_len = distance(shot.coords.values, shot.coords_end.values)
     dot = ((ball.coords.x-shot.coords.x)* (shot.coords_end.x-shot.coords.x)+ (ball.coords.y-shot.coords.y)* (shot.coords_end.y-shot.coords.y))/shot_len**2
     closestx=shot.coords.x+ (dot*(shot.coords_end.x-shot.coords.x))
@@ -143,10 +151,11 @@ def col_ball_shot(ball, shot):
     if(d1+d2 >= shot_len-buffer and d1+d2 <= shot_len+buffer):
         ball_to_shot = distance(ball.coords.values, [closestx, closesty])
         if ball_to_shot <= ball.radius:
-            normal_vector= Vector(ball.coords.x -closestx, ball.coords.y -closesty )
-            return True, normal_vector
+            normal_vector= Vector(ball.coords.x -closestx, ball.coords.y -closesty)
+            col_deep = abs(distance([ball.coords.x, ball.coords.y], [closestx, closesty])-ball.radius)
+            return True, normal_vector, col_deep
         
-    return False, 0
+    return False, 0, 0
 
 
 def col_ball_ball(ball, ball2):

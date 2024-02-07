@@ -11,6 +11,7 @@ import functions.collisions as coll
 import vars.const as const
 import vars.setup as setup
 import functions.sound as sound
+import functions.general as general
 from vars.setup import ball_group, wall_group, circle_group, flipper_group, line_group, shot_group
 from classes.vectors import Vector
 
@@ -65,7 +66,7 @@ class Ball(pygame.sprite.Sprite):
         self.coords = Vector(x, y)
         self.radius = radius
         self.reibung = 0.93
-        self.energy = 1.05
+        self.energy = 1.03
         self.ball_coll=False
 
         if speed is None:
@@ -129,8 +130,9 @@ class Ball(pygame.sprite.Sprite):
         for circle in circle_group:
             is_colliding, normal_vector = coll.col_ball_circle(self, circle)
             if is_colliding and self.test:
-                    self.coords -= self.speed
-                    self.coords -= circle.speed
+                    #self.coords -= self.speed
+                    col_deep = abs(general.distance([self.coords.x, self.coords.y], [circle.coords.x, circle.coords.y])-(self.radius+circle.radius))
+                    normal_vector_norm =  Vector(normal_vector.x/normal_vector.__abs__(), normal_vector.y/normal_vector.__abs__())
                     dot_product = self.speed.x * normal_vector.x + self.speed.y * normal_vector.y
                     magnitude_normal = math.sqrt(normal_vector.x ** 2 + normal_vector.y ** 2)
                     parallel_scalar = dot_product / (magnitude_normal ** 2)
@@ -138,16 +140,17 @@ class Ball(pygame.sprite.Sprite):
                     perpendicular_vector = (self.speed.x - parallel_vector[0], self.speed.y - parallel_vector[1])
                     # Resultierende Geschwindigkeiten
                     # Resultierenden Vektor berechnen
+                    self.coords += Vector(normal_vector_norm.x*col_deep, normal_vector_norm.y*col_deep)
                     self.speed.x = (-parallel_vector[0] + perpendicular_vector[0])*self.energy
                     self.speed.y = (-parallel_vector[1] + perpendicular_vector[1])*self.energy
                     self.ball_coll = True
                     
 
         for flipper in flipper_group:
-            is_colliding, normal_vector, v_vector = coll.col_ball_flipper(self, flipper)
+            is_colliding, normal_vector, v_vector, col_deep = coll.col_ball_flipper(self, flipper)
             if is_colliding and self.test:
-                    #self.speed.rotate(2*-(coll_angle - self.speed.angle))
 
+                    normal_vector_norm =  Vector(normal_vector.x/normal_vector.__abs__(), normal_vector.y/normal_vector.__abs__())
                     dot_product = self.speed.x * normal_vector.x + self.speed.y * normal_vector.y
                     magnitude_normal = math.sqrt(normal_vector.x ** 2 + normal_vector.y ** 2)
                     parallel_scalar = dot_product / (magnitude_normal ** 2)
@@ -156,22 +159,25 @@ class Ball(pygame.sprite.Sprite):
                     ##Es muss noch die Geschwindigkeit des Kollisionspunktes auf dem Kreis addiert werden 
                     # Resultierenden Vektor berechnen
                     if flipper.check_velocity:
-                        self.coords -= self.speed
+                        #self.coords -= self.speed
+                        self.coords += Vector(normal_vector_norm.x*col_deep, normal_vector_norm.y*col_deep)
                         self.coords += v_vector+ v_vector
                         self.speed.x = (-parallel_vector[0] + perpendicular_vector[0]+ v_vector.x)*self.reibung
                         self.speed.y = (-parallel_vector[1] + perpendicular_vector[1]+ v_vector.y)*self.reibung
                     else:
-                        self.coords -= self.speed
+                        #self.coords -= self.speed
+                        self.coords += Vector(normal_vector_norm.x*col_deep, normal_vector_norm.y*col_deep)
                         self.speed.x = (-parallel_vector[0] + perpendicular_vector[0])*self.reibung
                         self.speed.y = (-parallel_vector[1] + perpendicular_vector[1])*self.reibung
 
                         
         
         for line in line_group:
-            is_colliding, normal_vector = coll.col_ball_line(self, line)
+            is_colliding, normal_vector, col_deep = coll.col_ball_line(self, line)
             if is_colliding and self.test:
-                    self.coords -= self.speed
+                    #self.coords -= self.speed
                     #self.speed.rotate(2*-(coll_angle - self.speed.angle))
+                    normal_vector_norm =  Vector(normal_vector.x/normal_vector.__abs__(), normal_vector.y/normal_vector.__abs__())
                     dot_product = self.speed.x * normal_vector.x + self.speed.y * normal_vector.y
                     magnitude_normal = math.sqrt(normal_vector.x ** 2 + normal_vector.y ** 2)
                     parallel_scalar = dot_product / (magnitude_normal ** 2)
@@ -179,13 +185,16 @@ class Ball(pygame.sprite.Sprite):
                     perpendicular_vector = (self.speed.x - parallel_vector[0], self.speed.y - parallel_vector[1])
 
                     # Resultierenden Vektor berechnen
+                    self.coords += Vector(normal_vector_norm.x*col_deep, normal_vector_norm.y*col_deep)
                     self.speed.x = (-parallel_vector[0] + perpendicular_vector[0])*self.reibung
                     self.speed.y = (-parallel_vector[1] + perpendicular_vector[1])*self.reibung
+                    #self.coords += self.speed
 
         for shot in shot_group:
-            is_colliding, normal_vector = coll.col_ball_shot(self, shot)
+            is_colliding, normal_vector, col_deep = coll.col_ball_shot(self, shot)
             if is_colliding and self.test:
                     #self.speed.rotate(2*-(coll_angle - self.speed.angle))
+                    normal_vector_norm =  Vector(normal_vector.x/normal_vector.__abs__(), normal_vector.y/normal_vector.__abs__())
                     dot_product = self.speed.x * normal_vector.x + self.speed.y * normal_vector.y
                     magnitude_normal = math.sqrt(normal_vector.x ** 2 + normal_vector.y ** 2)
                     parallel_scalar = dot_product / (magnitude_normal ** 2)
@@ -194,13 +203,15 @@ class Ball(pygame.sprite.Sprite):
 
                     # Resultierenden Vektor berechnen
                     if shot.check_velocity:
-                        self.coords -= self.speed
+                        #self.coords -= self.speed
+                        self.coords += Vector(normal_vector_norm.x*col_deep, normal_vector_norm.y*col_deep)
                         self.coords += Vector(shot.nv.x *shot.speed, shot.nv.y *shot.speed)
                         self.speed.x = (-parallel_vector[0] + perpendicular_vector[0]+ shot.nv.x *shot.speed)*self.reibung
                         self.speed.y = (-parallel_vector[1] + perpendicular_vector[1]+ shot.nv.y *shot.speed)*self.reibung
                     else:
-                        self.coords -= self.speed
-                        self.coords += Vector(shot.nv.x *shot.speed, shot.nv.y *shot.speed)
+                        #self.coords -= self.speed
+                        self.coords += Vector(normal_vector_norm.x*col_deep, normal_vector_norm.y*col_deep)
+                        #self.coords += Vector(shot.nv.x *shot.speed, shot.nv.y *shot.speed)
                         self.speed.x = (-parallel_vector[0] + perpendicular_vector[0])*self.reibung
                         self.speed.y = (-parallel_vector[1] + perpendicular_vector[1])*self.reibung
                          
@@ -210,7 +221,9 @@ class Ball(pygame.sprite.Sprite):
             if self.index != ball.index:
                 is_colliding, normal_vector = coll.col_ball_ball(self, ball)
                 if is_colliding and self.test:
-                        self.coords -= self.speed
+                        #self.coords -= self.speed
+                        col_deep = abs(general.distance([self.coords.x, self.coords.y], [ball.coords.x, ball.coords.y])-(self.radius+ball.radius))
+                        normal_vector_norm =  Vector(normal_vector.x/normal_vector.__abs__(), normal_vector.y/normal_vector.__abs__())
                         # Geschwindigkeiten umrechnen
                         
                         dot_product1 = self.speed.x * normal_vector.x + self.speed.y * normal_vector.y
@@ -223,7 +236,9 @@ class Ball(pygame.sprite.Sprite):
                         new_speed2 = [(2 * dot_product1 * normal_vector.x - ball.speed.x) / total_mass,
                                     (2 * dot_product1 * normal_vector.y - ball.speed.y) / total_mass]
 
-                        # Resultierende Geschwindigkeiten
+                        # Resultierende Vektoren
+                        self.coords += Vector(normal_vector_norm.x*col_deep, normal_vector_norm.y*col_deep)
+                        ball.coords -= Vector(normal_vector_norm.x*col_deep, normal_vector_norm.y*col_deep)
                         self.speed = Vector(new_speed1[0]*self.reibung, new_speed1[1]*self.reibung)
                         ball.speed = Vector(new_speed2[0]*self.reibung, new_speed2[1]*self.reibung)
                         
