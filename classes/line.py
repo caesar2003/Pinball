@@ -34,7 +34,7 @@ class Line(pygame.sprite.Sprite):
     update: does all the updates of the wall
     '''
 
-    def __init__(self, start_point, end_point, group = True):
+    def __init__(self, start_point, end_point,color='black', group = True):
         '''
         initiation of a flipper object
         
@@ -59,6 +59,7 @@ class Line(pygame.sprite.Sprite):
         if isinstance(end_point, tuple) or isinstance(end_point, list) or isinstance(end_point, np.ndarray):
             self.coords_end = Vector(end_point[0], end_point[1])
 
+        self.color = color
 
         if group:
             line_group.add(self)
@@ -89,6 +90,6 @@ class Line(pygame.sprite.Sprite):
         returns: None
         '''
         self.move()
-        pygame.draw.line(setup.screen, 'black', self.coords.values, self.coords_end.values, 5)
+        pygame.draw.line(setup.screen, self.color, self.coords.values, self.coords_end.values, 5)
 
     

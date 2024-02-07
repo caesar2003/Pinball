@@ -12,7 +12,7 @@ import vars.setup as setup
 from vars.setup import line_group
 
 def rect(center, width, height):
-    top = Line([center[0]-width/2, center[1]+height/2], [center[0]+width/2, center[1]+height/2])
-    right = Line([center[0]+width/2, center[1]+height/2], [center[0]+width/2,center[1]-height/2])
-    bottom = Line([center[0]+width/2, center[1]-height/2], [center[0]-width/2, center[1]-height/2])
-    left = Line([center[0]-width/2, center[1]-height/2], [center[0]-width/2, center[1]+height/2])
+    top = Line([center[0]-width/2, center[1]+height/2], [center[0]+width/2, center[1]+height/2], 'Blue')
+    right = Line([center[0]+width/2, center[1]+height/2], [center[0]+width/2,center[1]-height/2], 'Blue')
+    bottom = Line([center[0]+width/2, center[1]-height/2], [center[0]-width/2, center[1]-height/2], 'Blue')
+    left = Line([center[0]-width/2, center[1]-height/2], [center[0]-width/2, center[1]+height/2], 'Blue')

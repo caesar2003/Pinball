@@ -11,6 +11,7 @@ import functions.system as system
 from functions.rectangle import rect
 import vars.const as const
 import vars.setup as setup
+import functions.score as sc
 from vars.setup import clock
 from vars.setup import screen, bg, bg_rect, width, height
 from vars.setup import wall_group, ball_group, circle_group, flipper_group
@@ -28,6 +29,8 @@ def event(flipper_right, flipper_left, shot):
                     flipper_left.rotating = True
                 if event.key == pygame.K_SPACE:
                     shot.pressed = True
+                if event.key == pygame.K_r:
+                    sc.new_ball()
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_d:
                     flipper_right.rotating = False
