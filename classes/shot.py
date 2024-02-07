@@ -108,7 +108,6 @@ class Shot(pygame.sprite.Sprite):
 
         returns: None
         '''
-        print(self.speed)
         self.move()
         pygame.draw.line(setup.screen, 'black', self.coords.values, self.coords_end.values, 5)
 
