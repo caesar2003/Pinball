@@ -94,7 +94,7 @@ def col_ball_line(ball, line):
     angle: the angle of the collision (vom Lot aus (TODO: Übersetzen))
     '''
     if distance(ball.coords.values, line.coords.values) <= ball.radius:
-        closestx, closesty = line.coords_end.x, line.coords_end.y
+        closestx, closesty = line.coords.x, line.coords.y
         normal_vector= Vector(ball.coords.x -closestx, ball.coords.y -closesty )
         col_deep = abs(distance([ball.coords.x, ball.coords.y], [closestx, closesty])-ball.radius)
         return True,normal_vector, col_deep
