@@ -83,7 +83,6 @@ class Ball(pygame.sprite.Sprite):
             ball_group.add(self)
             
 
-        self.test = True
 
     def __str__(self):
         '''
@@ -129,7 +128,7 @@ class Ball(pygame.sprite.Sprite):
         self.ball_coll=False
         for circle in circle_group:
             is_colliding, normal_vector = coll.col_ball_circle(self, circle)
-            if is_colliding and self.test:
+            if is_colliding:
                     #self.coords -= self.speed
                     col_deep = abs(general.distance([self.coords.x, self.coords.y], [circle.coords.x, circle.coords.y])-(self.radius+circle.radius))
                     normal_vector_norm =  Vector(normal_vector.x/normal_vector.__abs__(), normal_vector.y/normal_vector.__abs__())
@@ -148,7 +147,7 @@ class Ball(pygame.sprite.Sprite):
 
         for flipper in flipper_group:
             is_colliding, normal_vector, v_vector, col_deep = coll.col_ball_flipper(self, flipper)
-            if is_colliding and self.test:
+            if is_colliding:
 
                     normal_vector_norm =  Vector(normal_vector.x/normal_vector.__abs__(), normal_vector.y/normal_vector.__abs__())
                     dot_product = self.speed.x * normal_vector.x + self.speed.y * normal_vector.y
@@ -174,7 +173,7 @@ class Ball(pygame.sprite.Sprite):
         
         for line in line_group:
             is_colliding, normal_vector, col_deep = coll.col_ball_line(self, line)
-            if is_colliding and self.test:
+            if is_colliding:
                     #self.coords -= self.speed
                     #self.speed.rotate(2*-(coll_angle - self.speed.angle))
                     normal_vector_norm =  Vector(normal_vector.x/normal_vector.__abs__(), normal_vector.y/normal_vector.__abs__())
@@ -192,7 +191,7 @@ class Ball(pygame.sprite.Sprite):
 
         for shot in shot_group:
             is_colliding, normal_vector, col_deep = coll.col_ball_shot(self, shot)
-            if is_colliding and self.test:
+            if is_colliding:
                     #self.speed.rotate(2*-(coll_angle - self.speed.angle))
                     normal_vector_norm =  Vector(normal_vector.x/normal_vector.__abs__(), normal_vector.y/normal_vector.__abs__())
                     dot_product = self.speed.x * normal_vector.x + self.speed.y * normal_vector.y
@@ -220,7 +219,7 @@ class Ball(pygame.sprite.Sprite):
         for ball in ball_group:
             if self.index != ball.index:
                 is_colliding, normal_vector = coll.col_ball_ball(self, ball)
-                if is_colliding and self.test:
+                if is_colliding:
                         #self.coords -= self.speed
                         col_deep = abs(general.distance([self.coords.x, self.coords.y], [ball.coords.x, ball.coords.y])-(self.radius+ball.radius))
                         normal_vector_norm =  Vector(normal_vector.x/normal_vector.__abs__(), normal_vector.y/normal_vector.__abs__())
