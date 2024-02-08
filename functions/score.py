@@ -40,7 +40,7 @@ def score(current_score, lives):
     return current_score, lives
 
 def new_ball():
-    Ball(width-15-25, height-20-18, speed= [0,0])
+    Ball(width-15-25, height-20-70, speed= [0,0])
     #Ball(50, 50, speed= [0,0])
 
 def new_ball_spawn(ball_group, lives):
