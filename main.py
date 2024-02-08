@@ -53,6 +53,8 @@ Circle(250,400, 30, [1,0])
 Line([width-15-50-5,height-300], [width-15-50-5-125,height-100])
 Line([10,height-300], [10+125,height-100])
 sd.background_music()
+
+
 while True:
     current_score=0
     lives = 3
