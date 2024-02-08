@@ -69,7 +69,7 @@ def new_ball_spawn(ball_group, lives):
     
     font = pygame.font.SysFont(None, 36)
     if lives==1:
-        text = font.render(f"{lives} live left", True, (223, 207, 190))
+        text = font.render(f"{lives} life left", True, (223, 207, 190))
     else:
         text = font.render(f"{lives} lives left", True, (223, 207, 190))
     # Textposition
